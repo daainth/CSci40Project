@@ -4,12 +4,15 @@
 #include <string>
 using namespace std;
 
+enum rooms{TREE,ISLAND,/*OCEAN*/,UPPERDECK,SHIPWHEEL,BOTTOMDECK,GALLEY,BRIG,CAPTAINQUARTERS,CARGOHOLD};
+
 void PigLatin();
 void instruct();
 void gorilla();
 void banana();
 void natives();
 void prisoner();
+
 
 int main()
 {
