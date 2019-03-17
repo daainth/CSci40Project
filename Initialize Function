@@ -1,0 +1,59 @@
+#include <iostream>
+using namespace std;
+
+enum room{TREE,ISLAND,GANGPLANK,UPPERDECK,SHIPWHEEL,BOTTOMDECK,GALLEY,BRIG,CAPTAINQUARTERS,CARGOHOLD,NUMBER_ROOMS};
+
+struct roomType
+{
+    string description;
+    bool banana;
+    bool keys;
+    bool knife;
+    bool treasure;
+    room north;    // north and south determine where the room is in relation to other rooms.
+    room south;
+    bool exit;    // Not sure if this will work but it is an exit bool so the player can leave the room.
+    
+};
+int main()
+{
+	/*while (gameisnotOver)
+	{
+		execute command;
+		read nextcommand;
+	}*/
+	return 0;
+}
+void execute (string command)
+{
+    
+}
+void initialize()
+{
+    roomType Tree,Island,Gangplank;
+    
+    Tree.description = "   Long Description goes here ";
+    Tree.banana = true;
+    Tree.keys = false;
+    Tree.knife = false;
+    Tree.north = NUMBER_ROOMS;
+    Tree.south = NUMBER_ROOMS;
+  
+    
+    Island.description = " Long Desc   ";
+    Island.banana = false;
+    Island.keys = false;
+    Island.knife = false;
+    Island.north = NUMBER_ROOMS;
+    Island.south = NUMBER_ROOMS;
+    
+    Gangplank.description = "  Long desc  ";
+    Gangplank.banana = false;
+    Gangplank.knife = false;
+    Gangplank.keys = false;
+    Gangplank.north = NUMBER_ROOMS;
+    Gangplank.south = NUMBER_ROOMS;
+    // Continues on for every room and every item that can be placed in each room.
+    
+    
+}
