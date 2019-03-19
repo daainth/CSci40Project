@@ -4,14 +4,9 @@
 #include <string>
 using namespace std;
 
-enum rooms{TREE,ISLAND/*OCEAN*/,UPPERDECK,SHIPWHEEL,BOTTOMDECK,GALLEY,BRIG,CAPTAINQUARTERS,CARGOHOLD};
+enum rooms { TREE, ISLAND/*OCEAN*/, UPPERDECK, SHIPWHEEL, BOTTOMDECK, GALLEY, BRIG, CAPTAINQUARTERS, CARGOHOLD, NO_ROOMS };
 
-void PigLatin();
-void instruct();
-void gorilla();
-void banana();
-void natives();
-void prisoner();
+void execute(string);
 
 
 int main()
@@ -21,13 +16,18 @@ int main()
 	cout << "You have just awakened on a strange island with a terrible headache." << endl;
 	cout << "You can't remember anything about yourself or where you are." << endl;
 	cout << "Type 'help' to view instructions" << endl;
-	cin >> command;
-	/*while (gameisnotOver)
+	getline(cin, command);
+	while (command != "QUIT")
 	{
-		execute command;
-		read nextcommand;
-	}*/
+		execute(command);
+		getline(cin, command);
+	}
 
 
 	return 0;
+}
+
+void execute(string command)
+{
+
 }
