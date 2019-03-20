@@ -28,7 +28,7 @@ int main()
 	cout << "You can't remember anything about yourself or where you are." << endl;
 	cout << "Type 'help' to view instructions" << endl;
 	getline(cin, command);
-	while (command not gameOver)
+	while (not gameOver)
 	{
 		execute(command);
 		getline(cin, command);
