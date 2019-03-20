@@ -13,7 +13,7 @@ Diego Denis-Arrue
 #include <iso646.h>
 #include <string>
 using namespace std;
-bool gameOver=false;
+//bool gameOver=false;
 
 enum rooms { TREE, ISLAND/*OCEAN*/, UPPERDECK, SHIPWHEEL, BOTTOMDECK, GALLEY, BRIG, CAPTAINQUARTERS, CARGOHOLD, NOROOM };
 
@@ -28,7 +28,8 @@ int main()
 	cout << "You can't remember anything about yourself or where you are." << endl;
 	cout << "Type 'help' to view instructions" << endl;
 	getline(cin, command);
-	while (not gameOver)
+	//while (not gameOver)
+	while(toupper(command) = 'QUIT')
 	{
 		execute(command);
 		getline(cin, command);
