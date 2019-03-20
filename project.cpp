@@ -1,3 +1,13 @@
+//Group 5
+/*Leonard Mejia
+Joseph Alvarez
+David Inthavong 
+Vanessa S.
+Diego Denis-Arrue
+*/
+/*Group project island game that your goal is to leave the island */
+
+
 #include <iostream>
 #include <fstream>
 #include <iso646.h>
