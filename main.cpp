@@ -44,3 +44,4 @@ int main()
     else
         cout << str; 
 } 
+https://codereview.stackexchange.com/questions/91048/c-pig-latin-program
