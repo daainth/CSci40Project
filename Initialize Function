@@ -1,59 +1,93 @@
-#include <iostream>
-using namespace std;
-
-enum room{TREE,ISLAND,GANGPLANK,UPPERDECK,SHIPWHEEL,BOTTOMDECK,GALLEY,BRIG,CAPTAINQUARTERS,CARGOHOLD,NUMBER_ROOMS};
-
-struct roomType
+void initialize(roomType rooms[NOROOM])
 {
-    string description;
-    bool banana;
-    bool keys;
-    bool knife;
-    bool treasure;
-    room north;    // north and south determine where the room is in relation to other rooms.
-    room south;
-    bool exit;    // Not sure if this will work but it is an exit bool so the player can leave the room.
+    rooms[ISLAND].longd = " Long Desc   ";
+    rooms[ISLAND].shortd = "    ";
+    rooms[ISLAND].direction.north = NOROOM;
+    rooms[ISLAND].direction.south = NOROOM;
+    rooms[ISLAND].direction.west = NOROOM;
+    rooms[ISLAND].direction.east = GANGPLANK;
+    rooms[ISLAND].direction.up = NOROOM;
+    rooms[ISLAND].direction.down = NOROOM;
+    rooms[ISLAND].returning = false;
     
-};
-int main()
-{
-	/*while (gameisnotOver)
-	{
-		execute command;
-		read nextcommand;
-	}*/
-	return 0;
-}
-void execute (string command)
-{
+    rooms[GANGPLANK].longd = "  Long desc  ";
+    rooms[GANGPLANK].shortd = "    ";
+    rooms[GANGPLANK].direction.north = NOROOM;
+    rooms[GANGPLANK].direction.south = NOROOM;
+    rooms[GANGPLANK].direction.west = ISLAND;
+    rooms[GANGPLANK].direction.east = UPPERDECK;
+    rooms[GANGPLANK].direction.up = NOROOM;
+    rooms[GANGPLANK].direction.down = NOROOM;
+    rooms[GANGPLANK].returning = false;
     
-}
-void initialize()
-{
-    roomType Tree,Island,Gangplank;
+    rooms[SHIPWHEEL].longd = "  Long desc  ";
+    rooms[SHIPWHEEL].shortd = "    ";
+    rooms[SHIPWHEEL].direction.north = NOROOM;
+    rooms[SHIPWHEEL].direction.south = UPPERDECK;
+    rooms[SHIPWHEEL].direction.west = NOROOM;
+    rooms[SHIPWHEEL].direction.east = NOROOM;
+    rooms[SHIPWHEEL].direction.up = NOROOM;
+    rooms[SHIPWHEEL].direction.down = NOROOM;
+    rooms[SHIPWHEEL].returning = false;
     
-    Tree.description = "   Long Description goes here ";
-    Tree.banana = true;
-    Tree.keys = false;
-    Tree.knife = false;
-    Tree.north = NUMBER_ROOMS;
-    Tree.south = NUMBER_ROOMS;
-  
+    rooms[UPPERDECK].longd = "  Long desc  ";
+    rooms[UPPERDECK].shortd = "    ";
+    rooms[UPPERDECK].direction.north = SHIPWHEEL;
+    rooms[UPPERDECK].direction.south = CAPTAINQUARTERS; 
+    rooms[UPPERDECK].direction.west = GANGPLANK;
+    rooms[UPPERDECK].direction.east = NOROOM;
+    rooms[UPPERDECK].direction.up = NOROOM;
+    rooms[UPPERDECK].direction.down = BOTTOMDECK; 
+    rooms[UPPERDECK].returning = false;
     
-    Island.description = " Long Desc   ";
-    Island.banana = false;
-    Island.keys = false;
-    Island.knife = false;
-    Island.north = NUMBER_ROOMS;
-    Island.south = NUMBER_ROOMS;
+    rooms[BOTTOMDECK].longd = "  Long desc  ";
+    rooms[BOTTOMDECK].shortd = "    ";
+    rooms[BOTTOMDECK].direction.north = NOROOM;
+    rooms[BOTTOMDECK].direction.south = BRIG;
+    rooms[BOTTOMDECK].direction.west = CARGOHOLD;
+    rooms[BOTTOMDECK].direction.east = GALLEY;
+    rooms[BOTTOMDECK].direction.up = UPPERDECK;
+    rooms[BOTTOMDECK].direction.down = NOROOM;
+    rooms[BOTTOMDECK].returning = false;
     
-    Gangplank.description = "  Long desc  ";
-    Gangplank.banana = false;
-    Gangplank.knife = false;
-    Gangplank.keys = false;
-    Gangplank.north = NUMBER_ROOMS;
-    Gangplank.south = NUMBER_ROOMS;
-    // Continues on for every room and every item that can be placed in each room.
+    rooms[GALLEY].longd = "  Long desc  ";
+    rooms[GALLEY].shortd = "    ";
+    rooms[GALLEY].direction.north = NOROOM;
+    rooms[GALLEY].direction.south = NOROOM;
+    rooms[GALLEY].direction.west = BOTTOMDECK;
+    rooms[GALLEY].direction.east = NOROOM;
+    rooms[GALLEY].direction.up = NOROOM;
+    rooms[GALLEY].direction.down = NOROOM;
+    rooms[GALLEY].returning = false;
     
+    rooms[BRIG].longd = "  Long desc  ";
+    rooms[BRIG].shortd = "    ";
+    rooms[BRIG].direction.north = BOTTOMDECK;
+    rooms[BRIG].direction.south = NOROOM;
+    rooms[BRIG].direction.west = CARGOHOLD;
+    rooms[BRIG].direction.east=GALLEY;
+    rooms[BRIG].direction.up = NOROOM;
+    rooms[BRIG].direction.down = NOROOM;
+    rooms[BRIG].returning = false;
+    
+    rooms[CAPTAINQUARTERS].longd = "  Long desc  ";
+    rooms[CAPTAINQUARTERS].shortd = "    ";
+    rooms[CAPTAINQUARTERS].direction.north = UPPERDECK;
+    rooms[CAPTAINQUARTERS].direction.south = NOROOM;
+    rooms[CAPTAINQUARTERS].direction.west = NOROOM;
+    rooms[CAPTAINQUARTERS].direction.east = NOROOM;
+    rooms[CAPTAINQUARTERS].direction.up = NOROOM;
+    rooms[CAPTAINQUARTERS].direction.down = NOROOM;
+    rooms[CAPTAINQUARTERS].returning = false;
+    
+    rooms[CARGOHOLD].longd = "  Long desc  ";
+    rooms[CARGOHOLD].shortd = "    ";
+    rooms[CARGOHOLD].direction.north = NOROOM;
+    rooms[CARGOHOLD].direction.south = NOROOM;
+    rooms[CARGOHOLD].direction.east = BOTTOMDECK;
+    rooms[CARGOHOLD].direction.west = NOROOM;
+    rooms[CARGOHOLD].direction.up = NOROOM;
+    rooms[CARGOHOLD].direction.down = NOROOM;
+    rooms[CARGOHOLD].returning = false;
     
 }
