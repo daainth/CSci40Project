@@ -42,20 +42,20 @@ struct roomType {
 };
 
 void execute(string,rooms,roomType);
-void initialize(rooms);
+void initialize(roomType[NOROOM]);
 
 int main()
 {
 	string command;
 	roomType room[NOROOM];
-	rooms currentRoom;
+    	initialize(room);
 	cout << "You have just awakened on a strange island with a terrible headache." << endl;
 	cout << "You can't remember anything about yourself or where you are." << endl;
 	cout << "Type 'help' to view instructions" << endl;
 	getline(cin, command);
 	gameOver = command == "quit";
 	currentRoom = ISLAND;
-	initialize(room);
+	
 	while (not gameOver)
 		//while(command != "quit")
 	{
