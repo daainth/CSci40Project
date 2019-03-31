@@ -1,0 +1,208 @@
+//Group 5
+/*Leonard Mejia
+Joseph Alvarez
+David Inthavong
+Vanessa S.
+Diego Denis-Arrue
+*/
+/*Group project island game that your goal is to leave the island */
+
+
+#include <iostream>
+#include <fstream>
+#include <iso646.h>
+#include <string>
+using namespace std;
+bool gameOver = false;
+
+//Eventually possibly include "Ocean" to rooms
+enum rooms { TREE, ISLAND, GANGPLANK, UPPERDECK, SHIPWHEEL, BOTTOMDECK, GALLEY, BRIG, CAPTAINQUARTERS, CARGOHOLD, NOROOM };
+
+struct itemlist {
+	bool knife;
+	bool bananas;
+	bool treasure;
+	bool keys;
+	bool prisonor;
+};
+struct movement {
+	rooms north;
+	rooms south;
+	rooms east;
+	rooms west;
+	rooms up;
+	rooms down;
+};
+struct roomType {
+	string longd; //Long description
+	string shortd; //Short description
+	movement direction;
+	itemlist item;
+	bool returning;//Checks if user has been here before for the descriptions
+};
+
+
+void initialize(roomType[NOROOM]);    // Has to be roomtype[NOROOM] for some reason
+
+void execute(string, rooms&, roomType[NOROOM]); // roomType has an & next to it because we need the function to return the current room
+
+int main()
+{
+	string command;
+	roomType room[NOROOM];
+    rooms currentRoom, lastRoom;
+    
+    initialize(room);                        // initialize sets everything up from the start of the game
+    lastRoom = currentRoom = ISLAND; 
+    	while (not gameOver)
+	{   
+	    cout<<"You are in "<<room[currentRoom].longd<<endl;
+	    getline(cin, command);
+		execute(command, currentRoom, room);
+		
+        if (currentRoom == NOROOM)    // NOROOM is used when you cannot go into an area
+        {
+            cout<<"You can't go that way"<<endl;
+            currentRoom = lastRoom;  //Sets current room to whatever room you were in before
+        }
+        else
+        {
+            lastRoom = currentRoom;
+        }
+        
+        
+	}
+	return 0;
+}
+
+
+// This needs to be rewritten because it only works with one word at the moment
+void execute(string command, rooms& currentRoom, roomType rooms[NOROOM])  
+{
+    if (!rooms[currentRoom].returning)
+    {
+	    if (command == "south")
+	    {   
+	        currentRoom = rooms[currentRoom].direction.south;
+    
+	    }
+	    if (command == "east")
+	    {   
+	        currentRoom = rooms[currentRoom].direction.east;
+
+	    }
+	    if (command == "west")
+	    {   
+	        currentRoom = rooms[currentRoom].direction.west;
+    
+	    }
+	    if (command == "north")
+	    {   
+	        currentRoom = rooms[currentRoom].direction.north;
+	    }
+	    if (command == "up")
+	    {   
+	        currentRoom = rooms[currentRoom].direction.up;
+	    }
+        if (command == "down")
+	    {   
+	    currentRoom = rooms[currentRoom].direction.down;
+	    }
+    }
+
+ }
+
+
+void initialize(roomType rooms[NOROOM])
+{
+	rooms[ISLAND].longd = " island first ";
+	rooms[ISLAND].shortd = "  island second  ";
+	rooms[ISLAND].direction.north = NOROOM;
+	rooms[ISLAND].direction.south = NOROOM;
+	rooms[ISLAND].direction.west = NOROOM;
+	rooms[ISLAND].direction.east = GANGPLANK;
+	rooms[ISLAND].direction.up = NOROOM;
+	rooms[ISLAND].direction.down = NOROOM;
+	rooms[ISLAND].returning = false;
+
+	rooms[GANGPLANK].longd = "  gangplank first ";
+	rooms[GANGPLANK].shortd = "  gangplank second  ";
+	rooms[GANGPLANK].direction.north = NOROOM;
+	rooms[GANGPLANK].direction.south = NOROOM;
+	rooms[GANGPLANK].direction.west = ISLAND;
+	rooms[GANGPLANK].direction.east = UPPERDECK;
+	rooms[GANGPLANK].direction.up = NOROOM;
+	rooms[GANGPLANK].direction.down = NOROOM;
+	rooms[GANGPLANK].returning = false;
+
+	rooms[SHIPWHEEL].longd = "  shipwheel first ";
+	rooms[SHIPWHEEL].shortd = " shipwheel second   ";
+	rooms[SHIPWHEEL].direction.north = NOROOM;
+	rooms[SHIPWHEEL].direction.south = UPPERDECK;
+	rooms[SHIPWHEEL].direction.west = NOROOM;
+	rooms[SHIPWHEEL].direction.east = NOROOM;
+	rooms[SHIPWHEEL].direction.up = NOROOM;
+	rooms[SHIPWHEEL].direction.down = NOROOM;
+	rooms[SHIPWHEEL].returning = false;
+
+	rooms[UPPERDECK].longd = " upperdeck first ";
+	rooms[UPPERDECK].shortd = " upperdeck first   ";
+	rooms[UPPERDECK].direction.north = SHIPWHEEL;
+	rooms[UPPERDECK].direction.south = CAPTAINQUARTERS;
+	rooms[UPPERDECK].direction.west = GANGPLANK;
+	rooms[UPPERDECK].direction.east = NOROOM;
+	rooms[UPPERDECK].direction.up = NOROOM;
+	rooms[UPPERDECK].direction.down = BOTTOMDECK;
+	rooms[UPPERDECK].returning = false;
+
+	rooms[BOTTOMDECK].longd = "  bottomdeck first ";
+	rooms[BOTTOMDECK].shortd = "  bottomdeck second  ";
+	rooms[BOTTOMDECK].direction.north = NOROOM;
+	rooms[BOTTOMDECK].direction.south = BRIG;
+	rooms[BOTTOMDECK].direction.west = CARGOHOLD;
+	rooms[BOTTOMDECK].direction.east = GALLEY;
+	rooms[BOTTOMDECK].direction.up = UPPERDECK;
+	rooms[BOTTOMDECK].direction.down = NOROOM;
+	rooms[BOTTOMDECK].returning = false;
+
+	rooms[GALLEY].longd = "  galley first ";
+	rooms[GALLEY].shortd = "  galley second  ";
+	rooms[GALLEY].direction.north = NOROOM;
+	rooms[GALLEY].direction.south = NOROOM;
+	rooms[GALLEY].direction.west = BOTTOMDECK;
+	rooms[GALLEY].direction.east = NOROOM;
+	rooms[GALLEY].direction.up = NOROOM;
+	rooms[GALLEY].direction.down = NOROOM;
+	rooms[GALLEY].returning = false;
+
+	rooms[BRIG].longd = " brig first ";
+	rooms[BRIG].shortd = "  brig second  ";
+	rooms[BRIG].direction.north = BOTTOMDECK;
+	rooms[BRIG].direction.south = NOROOM;
+	rooms[BRIG].direction.west = CARGOHOLD;
+	rooms[BRIG].direction.east = GALLEY;
+	rooms[BRIG].direction.up = NOROOM;
+	rooms[BRIG].direction.down = NOROOM;
+	rooms[BRIG].returning = false;
+
+	rooms[CAPTAINQUARTERS].longd = "   capt first ";
+	rooms[CAPTAINQUARTERS].shortd = " cap second  ";
+	rooms[CAPTAINQUARTERS].direction.north = UPPERDECK;
+	rooms[CAPTAINQUARTERS].direction.south = NOROOM;
+	rooms[CAPTAINQUARTERS].direction.west = NOROOM;
+	rooms[CAPTAINQUARTERS].direction.east = NOROOM;
+	rooms[CAPTAINQUARTERS].direction.up = NOROOM;
+	rooms[CAPTAINQUARTERS].direction.down = NOROOM;
+	rooms[CAPTAINQUARTERS].returning = false;
+
+	rooms[CARGOHOLD].longd = " cargo  first ";
+	rooms[CARGOHOLD].shortd = " cargo second   ";
+	rooms[CARGOHOLD].direction.north = NOROOM;
+	rooms[CARGOHOLD].direction.south = NOROOM;
+	rooms[CARGOHOLD].direction.east = BOTTOMDECK;
+	rooms[CARGOHOLD].direction.west = NOROOM;
+	rooms[CARGOHOLD].direction.up = NOROOM;
+	rooms[CARGOHOLD].direction.down = NOROOM;
+	rooms[CARGOHOLD].returning = false;
+
+}
