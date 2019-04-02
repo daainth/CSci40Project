@@ -201,7 +201,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[BRIG].returning = false;
 
 	rooms[CAPTAINQUARTERS].longd = "There is a bed and a table in this room. (There is a knife on the table.)";
-	rooms[CAPTAINQUARTERS].shortd = "v";
+	rooms[CAPTAINQUARTERS].shortd = "There is a bed and a table in this room";
 	rooms[CAPTAINQUARTERS].direction.north = UPPERDECK;
 	rooms[CAPTAINQUARTERS].direction.south = NOROOM;
 	rooms[CAPTAINQUARTERS].direction.west = NOROOM;
