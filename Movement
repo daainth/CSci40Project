@@ -131,7 +131,7 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 void initialize(roomType rooms[NOROOM])
 {
 	rooms[ISLAND].longd = "The island is forested with banana trees. Most of the bananas are green, but one tree to your west might have ripe bananas. There are ominous drums in the background. There is a ship to your east with a gangplank to the shore";
-    rooms[ISLAND].shortd = "  island second  ";
+   	rooms[ISLAND].shortd = "  island second  ";
 	rooms[ISLAND].direction.north = NOROOM;
 	rooms[ISLAND].direction.south = NOROOM;
 	rooms[ISLAND].direction.west = NOROOM;
@@ -140,8 +140,8 @@ void initialize(roomType rooms[NOROOM])
 	rooms[ISLAND].direction.down = NOROOM;
 	rooms[ISLAND].returning = false;
 
-	rooms[GANGPLANK].longd = "  gangplank first ";
-	rooms[GANGPLANK].shortd = "  gangplank second  ";
+	rooms[GANGPLANK].longd = "You are aboard the Gangplank. The ocean surrounds you. To your east is the entrance to the ship's upperdeck.";
+	rooms[GANGPLANK].shortd = "You are on the GangPlank.";
 	rooms[GANGPLANK].direction.north = NOROOM;
 	rooms[GANGPLANK].direction.south = NOROOM;
 	rooms[GANGPLANK].direction.west = ISLAND;
