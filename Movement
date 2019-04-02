@@ -1,3 +1,4 @@
+  
 //Group 5
 /*Leonard Mejia
 Joseph Alvarez
@@ -44,7 +45,7 @@ struct roomType {
 
 void initialize(roomType[NOROOM]);    // Has to be roomtype[NOROOM] for some reason
 
-void execute(string, rooms&, roomType[NOROOM]); // roomType has an & next to it because we need the function to return the current room
+void execute(string, rooms&,rooms, roomType[NOROOM]); // roomType has an & next to it because we need the function to return the current room
 
 int main()
 {
@@ -54,69 +55,83 @@ int main()
     
     initialize(room);                        // initialize sets everything up from the start of the game
     lastRoom = currentRoom = ISLAND; 
-    	while (not gameOver)
+    
+    cout << "You have just awakened on a strange island with a terrible headache." << endl;
+	cout << "You can't remember anything about yourself or where you are." << endl;
+	cout << "Type 'help' to view instructions" << endl;
+	cout<<endl;
+    
+    while (not gameOver)
 	{   
-	    cout<<"You are in "<<room[currentRoom].longd<<endl;
+	    if(room[currentRoom].returning)
+	    {
+	        cout<<room[currentRoom].shortd<<endl;
+	    }
+	    else
+	    {
+	        cout<<room[currentRoom].longd<<endl;
+	    }
+	       
+	     
 	    getline(cin, command);
-		execute(command, currentRoom, room);
+		execute(command, currentRoom,lastRoom, room);
 		
         if (currentRoom == NOROOM)    // NOROOM is used when you cannot go into an area
         {
             cout<<"You can't go that way"<<endl;
             currentRoom = lastRoom;  //Sets current room to whatever room you were in before
         }
-        else
-        {
+        
             lastRoom = currentRoom;
-        }
-        
-        
+    
 	}
 	return 0;
 }
 
 
 // This needs to be rewritten because it only works with one word at the moment
-void execute(string command, rooms& currentRoom, roomType rooms[NOROOM])  
+void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[NOROOM])  
 {
-    if (!rooms[currentRoom].returning)
-    {
-	    if (command == "south")
-	    {   
-	        currentRoom = rooms[currentRoom].direction.south;
-    
-	    }
-	    if (command == "east")
-	    {   
-	        currentRoom = rooms[currentRoom].direction.east;
-
-	    }
-	    if (command == "west")
-	    {   
-	        currentRoom = rooms[currentRoom].direction.west;
-    
-	    }
-	    if (command == "north")
-	    {   
-	        currentRoom = rooms[currentRoom].direction.north;
-	    }
-	    if (command == "up")
-	    {   
-	        currentRoom = rooms[currentRoom].direction.up;
-	    }
-        if (command == "down")
-	    {   
-	    currentRoom = rooms[currentRoom].direction.down;
-	    }
+    if (command == "south")
+    {   
+        currentRoom = rooms[currentRoom].direction.south;
     }
+    if (command == "east")
+    {   
+        currentRoom = rooms[currentRoom].direction.east;
+    }
+    if (command == "west")
+    {   
+        currentRoom = rooms[currentRoom].direction.west;
+    }
+    if (command == "north")
+    {
+        currentRoom = rooms[currentRoom].direction.north;
+    }
+    if (command == "up")
+    {   
+        currentRoom = rooms[currentRoom].direction.up;
+    }
+    if (command == "down")
+    {   
+	    currentRoom = rooms[currentRoom].direction.down;
+    }
+	    
+    if (currentRoom == NOROOM)    // NOROOM is used when you cannot go into an area
+    {
+        cout<<"You can't go that way"<<endl;
+        currentRoom = lastRoom;  //Sets current room to whatever room you were in before
+    }
+        
+    rooms[lastRoom].returning = true;
 
  }
 
 
 void initialize(roomType rooms[NOROOM])
 {
-	rooms[ISLAND].longd = " island first ";
-	rooms[ISLAND].shortd = "  island second  ";
+	rooms[ISLAND].longd = "The island is forested with banana trees. Most of the bananas are green, but one tree to your west might have ripe bananas. There are ominous drums in the background. There is a ship to your east with a gangplank to the shore";
+    rooms[ISLAND].shortd = "  island second  ";
 	rooms[ISLAND].direction.north = NOROOM;
 	rooms[ISLAND].direction.south = NOROOM;
 	rooms[ISLAND].direction.west = NOROOM;
@@ -146,7 +161,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[SHIPWHEEL].returning = false;
 
 	rooms[UPPERDECK].longd = " upperdeck first ";
-	rooms[UPPERDECK].shortd = " upperdeck first   ";
+	rooms[UPPERDECK].shortd = " upperdeck second   ";
 	rooms[UPPERDECK].direction.north = SHIPWHEEL;
 	rooms[UPPERDECK].direction.south = CAPTAINQUARTERS;
 	rooms[UPPERDECK].direction.west = GANGPLANK;
@@ -206,3 +221,5 @@ void initialize(roomType rooms[NOROOM])
 	rooms[CARGOHOLD].returning = false;
 
 }
+
+
