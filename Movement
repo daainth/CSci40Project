@@ -130,11 +130,21 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 
 void initialize(roomType rooms[NOROOM])
 {
+	rooms[TREE].longd = "There is a large banana tree here. (There is one bunch of ripe bananas on the tree within reach.)";
+   	rooms[TREE].shortd = "  Tree second  ";
+	rooms[TREE].direction.north = NOROOM;
+	rooms[TREE].direction.south = NOROOM;
+	rooms[TREE].direction.west = NOROOM;
+	rooms[TREE].direction.east = ISLAND;
+	rooms[TREE].direction.up = NOROOM;
+	rooms[TREE].direction.down = NOROOM;
+	rooms[TREE].returning = false;
+	
 	rooms[ISLAND].longd = "The island is forested with banana trees. Most of the bananas are green, but one tree to your west might have ripe bananas. There are ominous drums in the background. There is a ship to your east with a gangplank to the shore";
    	rooms[ISLAND].shortd = "  island second  ";
 	rooms[ISLAND].direction.north = NOROOM;
 	rooms[ISLAND].direction.south = NOROOM;
-	rooms[ISLAND].direction.west = NOROOM;
+	rooms[ISLAND].direction.west = TREE;
 	rooms[ISLAND].direction.east = GANGPLANK;
 	rooms[ISLAND].direction.up = NOROOM;
 	rooms[ISLAND].direction.down = NOROOM;
@@ -150,7 +160,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[GANGPLANK].direction.down = NOROOM;
 	rooms[GANGPLANK].returning = false;
 
-	rooms[SHIPWHEEL].longd = "  shipwheel first ";
+	rooms[SHIPWHEEL].longd = "If the gorilla is there: There is a large gorilla by the ship's wheel. This gorilla is hostile. You can't approach the wheel. If the gorilla is not there: You are at the wheel.";
 	rooms[SHIPWHEEL].shortd = " shipwheel second   ";
 	rooms[SHIPWHEEL].direction.north = NOROOM;
 	rooms[SHIPWHEEL].direction.south = UPPERDECK;
@@ -160,7 +170,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[SHIPWHEEL].direction.down = NOROOM;
 	rooms[SHIPWHEEL].returning = false;
 
-	rooms[UPPERDECK].longd = " upperdeck first ";
+	rooms[UPPERDECK].longd = "The top deck has a wheel at the north end of the ship, and the south end of the ship has a ladder down to the lower deck. ";
 	rooms[UPPERDECK].shortd = " upperdeck second   ";
 	rooms[UPPERDECK].direction.north = SHIPWHEEL;
 	rooms[UPPERDECK].direction.south = CAPTAINQUARTERS;
@@ -170,7 +180,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[UPPERDECK].direction.down = BOTTOMDECK;
 	rooms[UPPERDECK].returning = false;
 
-	rooms[BOTTOMDECK].longd = "  bottomdeck first ";
+	rooms[BOTTOMDECK].longd = "The deck below is dimly lit, and smells musty. You can make out three doors. One is to the east, one is to the west, and one is a trapdoor below you.";
 	rooms[BOTTOMDECK].shortd = "  bottomdeck second  ";
 	rooms[BOTTOMDECK].direction.north = NOROOM;
 	rooms[BOTTOMDECK].direction.south = BRIG;
@@ -180,7 +190,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[BOTTOMDECK].direction.down = NOROOM;
 	rooms[BOTTOMDECK].returning = false;
 
-	rooms[GALLEY].longd = "  galley first ";
+	rooms[GALLEY].longd = "This is the galley. It is mostly empty, but in a shadowy corner you see a parrot sitting on a perch.";
 	rooms[GALLEY].shortd = "  galley second  ";
 	rooms[GALLEY].direction.north = NOROOM;
 	rooms[GALLEY].direction.south = NOROOM;
@@ -190,7 +200,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[GALLEY].direction.down = NOROOM;
 	rooms[GALLEY].returning = false;
 
-	rooms[BRIG].longd = " brig first ";
+	rooms[BRIG].longd = "In this room there is a prisoner in a locked cell. He says, "Jack, I'm so glad you're alive. The captain locked me up for cheating at cards, which is the only reason the islanders didn't capture me. They killed everyone else. Now I guess we're the only two left, which makes you captain since you were first mate. Go find the keys to unlock this door, and we can sail out of here."";
 	rooms[BRIG].shortd = "  brig second  ";
 	rooms[BRIG].direction.north = BOTTOMDECK;
 	rooms[BRIG].direction.south = NOROOM;
@@ -200,7 +210,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[BRIG].direction.down = NOROOM;
 	rooms[BRIG].returning = false;
 
-	rooms[CAPTAINQUARTERS].longd = "   capt first ";
+	rooms[CAPTAINQUARTERS].longd = "There is a bed and a table in this room. (There is a knife on the table.)";
 	rooms[CAPTAINQUARTERS].shortd = " cap second  ";
 	rooms[CAPTAINQUARTERS].direction.north = UPPERDECK;
 	rooms[CAPTAINQUARTERS].direction.south = NOROOM;
@@ -210,7 +220,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[CAPTAINQUARTERS].direction.down = NOROOM;
 	rooms[CAPTAINQUARTERS].returning = false;
 
-	rooms[CARGOHOLD].longd = " cargo  first ";
+	rooms[CARGOHOLD].longd = "You've entered the cargo hold. There are barrels, a pile of tools, and a trunk. (Treasure is in the trunk.)";
 	rooms[CARGOHOLD].shortd = " cargo second   ";
 	rooms[CARGOHOLD].direction.north = NOROOM;
 	rooms[CARGOHOLD].direction.south = NOROOM;
