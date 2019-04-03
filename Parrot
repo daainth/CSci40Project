@@ -1,0 +1,104 @@
+//Check for parrot
+
+#include <iostream>
+#include <string>
+using namespace std;
+int parrot();
+int check(string);
+string piglatin(string);
+int VowelFind(string);
+int i;
+string Vend="yay";
+string Cend="ay";
+
+
+int main()
+{
+    parrot();
+}
+
+
+int parrot()
+{
+    string first, second;
+    cin>>first>>second;
+    for(i=0;i<=1;i++)
+    {
+        if(i==0)
+        {
+            check(first);
+        }
+        else if(i==1)
+        {
+            check(second);
+        }
+    }
+    if(i==2)
+    {
+        cout<<piglatin(first)<<" "<<piglatin(second)<<" "<<endl;
+        parrot();
+    }
+    return 0;
+}
+
+int check(string keyword)
+{
+    if(keyword == "hello" || keyword == "polly" || keyword == "cracker")
+    {
+        i=2;
+        return i;
+    }
+    else
+    {
+        return i;
+    }
+}
+
+ 
+string piglatin(string word)
+ {
+     int firstvowel;
+     string begword, newword;
+     firstvowel = VowelFind(word);
+     if(firstvowel!=0)
+     {begword= word.substr(0, firstvowel);
+     word= word.erase(0, firstvowel);
+     newword=word+begword+Cend;
+     return newword;}
+     else{ newword = word+Vend;
+         return newword;
+        }
+     
+ }
+ 
+ 
+ int VowelFind(string thing)
+ {
+    int a, b, c, d, e, f, fv;
+    if(thing.find('a')>=0)
+    {a = thing.find('a'); }
+    if(thing.find('e')>=0)
+    {b = thing.find('e'); }
+    if(thing.find('i')>=0)
+    {c = thing.find('i'); }
+    if(thing.find('o')>=0)
+    {d = thing.find('o'); }
+    if(thing.find('u')>=0)
+    {e = thing.find('u'); }
+    if(thing.find('y')>=0)
+    {f = thing.find('y'); }
+    if(a>=0)
+    {fv=a; }
+    if(fv>b && b>=0)
+    {fv=b; }
+    if(fv>c && c>=0)
+    {fv=c; }
+    if(fv>d && d>=0)
+    {fv=d; }
+    if(fv>e && e>=0)
+    {fv=e; }
+    if(fv>f && f>=0)
+    {fv=f; }
+    return fv;
+ }
+
