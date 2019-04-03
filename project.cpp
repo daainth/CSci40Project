@@ -212,11 +212,11 @@ void initialize(roomType rooms[NOROOM])
 	rooms[BRIG].direction.south = NOROOM;
 	rooms[BRIG].direction.west = NOROOM;
 	rooms[BRIG].direction.east = NOROOM;
-	rooms[BRIG].direction.up = CARGOHOLD;
+	rooms[BRIG].direction.up = BOTTOMDECK;
 	rooms[BRIG].direction.down = NOROOM;
 	rooms[BRIG].returning = false;
 
-	rooms[CAPTAINQUARTERS].longd = "There is a bed and a table in this room.";
+	rooms[CAPTAINQUARTERS].longd = "You are now at the captain's quarters and there is a bed and a table in this room.";
 	rooms[CAPTAINQUARTERS].shortd = "You are at the captain's quarters";
 	rooms[CAPTAINQUARTERS].direction.north = UPPERDECK;
 	rooms[CAPTAINQUARTERS].direction.south = NOROOM;
