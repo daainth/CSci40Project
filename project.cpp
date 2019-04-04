@@ -145,6 +145,12 @@ void initialize(roomType rooms[NOROOM])
 	rooms[TREE].direction.up = NOROOM;
 	rooms[TREE].direction.down = NOROOM;
 	rooms[TREE].returning = false;
+	rooms[TREE].item.knife = false;
+	rooms[TREE].item.bananas = true;
+	rooms[TREE].item.treasure = false;
+	rooms[TREE].item.keys = false;
+	rooms[TREE].item.prisonor = false;
+
 
 	rooms[ISLAND].longd = "The island is forested with banana trees. Most of the bananas are green, but one tree to your west might have ripe bananas. There are ominous drums in the background. There is a ship to your east with a gangplank to the shore";
 	rooms[ISLAND].shortd = "You are at the island";
@@ -155,6 +161,11 @@ void initialize(roomType rooms[NOROOM])
 	rooms[ISLAND].direction.up = NOROOM;
 	rooms[ISLAND].direction.down = NOROOM;
 	rooms[ISLAND].returning = false;
+	rooms[ISLAND].item.knife = false;
+	rooms[ISLAND].item.bananas = false;
+	rooms[ISLAND].item.treasure = false;
+	rooms[ISLAND].item.keys = false;
+	rooms[ISLAND].item.prisonor = false;
 
 	rooms[GANGPLANK].longd = "You are aboard the Gangplank. The ocean surrounds you. To your east is the entrance to the ship's upperdeck.";
 	rooms[GANGPLANK].shortd = "You are on the GangPlank.";
@@ -165,6 +176,11 @@ void initialize(roomType rooms[NOROOM])
 	rooms[GANGPLANK].direction.up = NOROOM;
 	rooms[GANGPLANK].direction.down = NOROOM;
 	rooms[GANGPLANK].returning = false;
+	rooms[GANGPLANK].item.knife = false;
+	rooms[GANGPLANK].item.bananas = false;
+	rooms[GANGPLANK].item.treasure = false;
+	rooms[GANGPLANK].item.keys = false;
+	rooms[GANGPLANK].item.prisonor = false;
 
 	rooms[SHIPWHEEL].longd = "If the gorilla is there: There is a large gorilla by the ship's wheel. This gorilla is hostile. You can't approach the wheel. If the gorilla is not there: You are at the wheel.";
 	rooms[SHIPWHEEL].shortd = "You are at the ship's wheel";
@@ -175,6 +191,11 @@ void initialize(roomType rooms[NOROOM])
 	rooms[SHIPWHEEL].direction.up = NOROOM;
 	rooms[SHIPWHEEL].direction.down = NOROOM;
 	rooms[SHIPWHEEL].returning = false;
+	rooms[SHIPWHEEL].item.knife = false;
+	rooms[SHIPWHEEL].item.bananas = false;
+	rooms[SHIPWHEEL].item.treasure = false;
+	rooms[SHIPWHEEL].item.keys = false;
+	rooms[SHIPWHEEL].item.prisonor = false;
 
 	rooms[UPPERDECK].longd = "The top deck has a wheel at the north end of the ship, and the south end of the ship has a ladder down to the lower deck. ";
 	rooms[UPPERDECK].shortd = "You are at the upperdeck";
@@ -185,6 +206,11 @@ void initialize(roomType rooms[NOROOM])
 	rooms[UPPERDECK].direction.up = NOROOM;
 	rooms[UPPERDECK].direction.down = BOTTOMDECK;
 	rooms[UPPERDECK].returning = false;
+	rooms[UPPERDECK].item.knife = false;
+	rooms[UPPERDECK].item.bananas = false;
+	rooms[UPPERDECK].item.treasure = false;
+	rooms[UPPERDECK].item.keys = false;
+	rooms[UPPERDECK].item.prisonor = false;
 
 	rooms[BOTTOMDECK].longd = "The deck below is dimly lit, and smells musty. You can make out three doors. One is to the east, one is to the west, and one is a trapdoor below you.";
 	rooms[BOTTOMDECK].shortd = "You are at the bottomdeck";
@@ -195,6 +221,11 @@ void initialize(roomType rooms[NOROOM])
 	rooms[BOTTOMDECK].direction.up = UPPERDECK;
 	rooms[BOTTOMDECK].direction.down = BRIG;
 	rooms[BOTTOMDECK].returning = false;
+	rooms[BOTTOMDECK].item.knife = false;
+	rooms[BOTTOMDECK].item.bananas = false;
+	rooms[BOTTOMDECK].item.treasure = false;
+	rooms[BOTTOMDECK].item.keys = false;
+	rooms[BOTTOMDECK].item.prisonor = false;
 
 	rooms[GALLEY].longd = "This is the galley. It is mostly empty, but in a shadowy corner you see a parrot sitting on a perch.";
 	rooms[GALLEY].shortd = "You are at the galley";
@@ -205,6 +236,11 @@ void initialize(roomType rooms[NOROOM])
 	rooms[GALLEY].direction.up = NOROOM;
 	rooms[GALLEY].direction.down = NOROOM;
 	rooms[GALLEY].returning = false;
+	rooms[GALLEY].item.knife = false;
+	rooms[GALLEY].item.bananas = false;
+	rooms[GALLEY].item.treasure = false;
+	rooms[GALLEY].item.keys = true;
+	rooms[GALLEY].item.prisonor = false;
 
 	rooms[BRIG].longd = "In this room there is a prisoner in a locked cell. He says,'Jack, I'm so glad you're alive. The captain locked me up for cheating at cards, which is the only reason the islanders didn't capture me. They killed everyone else. Now I guess we're the only two left, which makes you captain since you were first mate. Go find the keys to unlock this door, and we can sail out of here.'";
 	rooms[BRIG].shortd = "You are at the brig";
@@ -215,6 +251,11 @@ void initialize(roomType rooms[NOROOM])
 	rooms[BRIG].direction.up = BOTTOMDECK;
 	rooms[BRIG].direction.down = NOROOM;
 	rooms[BRIG].returning = false;
+	rooms[BRIG].item.knife = false;
+	rooms[BRIG].item.bananas = false;
+	rooms[BRIG].item.treasure = false;
+	rooms[BRIG].item.keys = false;
+	rooms[BRIG].item.prisonor = true;
 
 	rooms[CAPTAINQUARTERS].longd = "You are now at the captain's quarters and there is a bed and a table in this room.";
 	rooms[CAPTAINQUARTERS].shortd = "You are at the captain's quarters";
@@ -225,6 +266,11 @@ void initialize(roomType rooms[NOROOM])
 	rooms[CAPTAINQUARTERS].direction.up = NOROOM;
 	rooms[CAPTAINQUARTERS].direction.down = NOROOM;
 	rooms[CAPTAINQUARTERS].returning = false;
+	rooms[CAPTAINQUARTERS].item.knife = true;
+	rooms[CAPTAINQUARTERS].item.bananas = true;
+	rooms[CAPTAINQUARTERS].item.treasure = false;
+	rooms[CAPTAINQUARTERS].item.keys = false;
+	rooms[CAPTAINQUARTERS].item.prisonor = false;
 
 	rooms[CARGOHOLD].longd = "You've entered the cargo hold. There are barrels, a pile of tools, and a trunk. (Treasure is in the trunk.)";
 	rooms[CARGOHOLD].shortd = "You are at the cargohold";
@@ -235,5 +281,10 @@ void initialize(roomType rooms[NOROOM])
 	rooms[CARGOHOLD].direction.up = NOROOM;
 	rooms[CARGOHOLD].direction.down = NOROOM;
 	rooms[CARGOHOLD].returning = false;
+	rooms[CARGOHOLD].item.knife = false;
+	rooms[CARGOHOLD].item.bananas = true;
+	rooms[CARGOHOLD].item.treasure = true;
+	rooms[CARGOHOLD].item.keys = false;
+	rooms[CARGOHOLD].item.prisonor = false;
 
 }
