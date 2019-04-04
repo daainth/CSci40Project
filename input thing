@@ -1,0 +1,33 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main()
+{
+    string input, word[10];
+    int blank, i, j;
+    getline(cin, input);
+    input=input+" ";
+    i=0;
+    while (input!="")
+    {
+        blank=input.find(' ');
+        word[i]=input.substr(0, blank);
+        input=input.erase(0, blank+1);
+        i++;
+    }
+    for(j=0; j<=i; j++)
+    {
+        cout<<word[j]<<" ";
+        
+    }
+    cout<<endl;
+    return 0;
+}
+
+
+
+
+
+
+
