@@ -7,7 +7,6 @@ Diego Denis-Arrue
 */
 /*Group project island game that your goal is to leave the island */
 
-
 #include <iostream>
 #include <fstream>
 #include <iso646.h>
@@ -48,15 +47,15 @@ struct inventory {
 
 void initialize(roomType[NOROOM]);    // Has to be roomtype[NOROOM] for some reason
 
-void execute(string, rooms&, rooms, roomType[NOROOM]); // roomType has an & next to it because we need the function to return the current room
+void execute(string, rooms&, rooms, roomType[NOROOM], inventory& ); // roomType has an & next to it because we need the function to return the current room
 
 int main()
 {
 	string command;
-	roomType room[NOROOM],inventory;
+	roomType room[NOROOM];
 	rooms currentRoom, lastRoom;
 	command = "empty";
-
+    inventory inv;
 	initialize(room);                        // initialize sets everything up from the start of the game
 	lastRoom = currentRoom = ISLAND;
 
@@ -79,7 +78,7 @@ int main()
 
 
 		getline(cin, command);
-		execute(command, currentRoom, lastRoom, room);
+		execute(command, currentRoom, lastRoom, room, inv);
 
 		if (currentRoom == NOROOM)    // NOROOM is used when you cannot go into an area
 		{
@@ -96,9 +95,8 @@ int main()
 
 
 // This needs to be rewritten because it only works with one word at the moment
-void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[NOROOM])
+void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[NOROOM],inventory& inv)
 {
-    inventory inv;
     string word[10];
     int blank, i, j;
     command=command+" ";
@@ -161,13 +159,27 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	        cout<<"No keys here bucko"<<endl;
 	    }
 	}
-	else
-	cout<<"Enter a real command"<<endl;
+	if (word[0] =="drop")
+	{
+        if(inv.item.keys)
+	    {
+	        if (word[1] == "keys")
+	        {
+	            inv.item.keys = false;
+	            rooms[currentRoom].item.keys = true;
+	            cout<<"You dropped the keys"<<endl;
+	        }
+	    }
+	    else
+	    cout<<"You dont have the keys"<<endl;
+	    
+	}
 }
 
 
 void initialize(roomType rooms[NOROOM])
 {
+    
 	rooms[TREE].longd = "There is a large banana tree here. (There is one bunch of ripe bananas on the tree within reach.)";
 	rooms[TREE].shortd = "You are at the tree";
 	rooms[TREE].direction.north = NOROOM;
