@@ -22,7 +22,6 @@ struct itemlist {
 	bool bananas;
 	bool treasure;
 	bool keys;
-	bool prisonor;
 };
 struct movement {
 	rooms north;
@@ -51,11 +50,15 @@ void execute(string, rooms&, rooms, roomType[NOROOM], inventory& ); // roomType 
 
 int main()
 {
+    inventory inv;
+    inv.item.knife = false;
+    inv.item.bananas = false;
+    inv.item.treasure = false;
+    inv.item.keys = false;
 	string command;
 	roomType room[NOROOM];
 	rooms currentRoom, lastRoom;
 	command = "empty";
-    inventory inv;
 	initialize(room);                        // initialize sets everything up from the start of the game
 	lastRoom = currentRoom = ISLAND;
 
@@ -108,34 +111,30 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
         command=command.erase(0, blank+1);
         i++;
     }
-    for(j=0; j<i; j++)
-    {
-        cout<<"Command Entered:"<<word[j]<<" ";
-    }
-    
+
     cout<<endl;
-    
-	if (word[0] == "south" or word[0] == "s")
+     
+	if (word[0] == "south" or word[0] == "s" or word[1] == "south" or word[1]=="s")
 	{
 		currentRoom = rooms[currentRoom].direction.south;
 	}
-	if (word[0] == "east" or word[0] == "e")
+	if (word[0] == "east" or word[0] == "e" or word[1] == "south" or word[1]=="s")
 	{
 		currentRoom = rooms[currentRoom].direction.east;
 	}
-	if (word[0] == "west" or word[0] == "w")
+	if (word[0] == "west" or word[0] == "w" or word[1] == "west" or word[1] == "w")
 	{
 		currentRoom = rooms[currentRoom].direction.west;
 	}
-	if (word[0] == "north" or word[0] == "n")
+	if (word[0] == "north" or word[0] == "n" or word[1] == "north" or word[1] == "n")
 	{
 		currentRoom = rooms[currentRoom].direction.north;
 	}
-	if (word[0] == "up" or word[0] == "u")
+	if (word[0] == "up" or word[0] == "u" or word[1] == "up" or word[1] == "u")
 	{
 		currentRoom = rooms[currentRoom].direction.up;
 	}
-	if (word[0] == "down" or word[0] == "d")
+	if (word[0] == "down" or word[0] == "d" or word[1] == "down" or word[1] == "d")
 	{
 		currentRoom = rooms[currentRoom].direction.down;
 	}
@@ -145,7 +144,10 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 		cout << "You can't go that way" << endl;
 		currentRoom = lastRoom;  //Sets current room to whatever room you were in before
 	}
-	if (word[0] == "take")
+	
+	
+	
+	if (word[0] == "take" or word[0]=="grab")    // PICK UP STUFF
 	{
 	    if (word[1] == "keys")
 	    {
@@ -158,8 +160,31 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	        else
 	        cout<<"No keys here bucko"<<endl;
 	    }
-	}
-	if (word[0] =="drop")
+	    
+	    
+	    if (word[1] == "banana")
+	    {
+	        if(rooms[currentRoom].item.bananas)
+	        {
+	            if(inv.item.knife)
+	            {
+	                if(rooms[currentRoom].item.bananas)
+	                {
+	                    rooms[currentRoom].item.bananas = false;
+	                    inv.item.bananas = true;
+	                    cout<<endl;
+	                    cout<<"You got a banana!"<<endl;;
+	                }
+	                else
+	                    cout<<"No bananas here"<<endl;
+	            }
+	            else
+	            cout<<"You'll need a knife to cut these down."<<endl;
+	        }
+	    }
+    }
+    
+	if (word[0] =="drop" or word[0] == "place")    // DROP STUFF
 	{
         if(inv.item.keys)
 	    {
@@ -193,7 +218,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[TREE].item.bananas = true;
 	rooms[TREE].item.treasure = false;
 	rooms[TREE].item.keys = false;
-	rooms[TREE].item.prisonor = false;
+
 
 
 	rooms[ISLAND].longd = "The island is forested with banana trees. Most of the bananas are green, but one tree to your west might have ripe bananas. There are ominous drums in the background. There is a ship to your east with a gangplank to the shore";
@@ -209,7 +234,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[ISLAND].item.bananas = false;
 	rooms[ISLAND].item.treasure = false;
 	rooms[ISLAND].item.keys = false;
-	rooms[ISLAND].item.prisonor = false;
+
 
 	rooms[GANGPLANK].longd = "You are aboard the Gangplank. The ocean surrounds you. To your east is the entrance to the ship's upperdeck.";
 	rooms[GANGPLANK].shortd = "You are on the GangPlank.";
@@ -224,7 +249,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[GANGPLANK].item.bananas = false;
 	rooms[GANGPLANK].item.treasure = false;
 	rooms[GANGPLANK].item.keys = false;
-	rooms[GANGPLANK].item.prisonor = false;
+
 
 	rooms[SHIPWHEEL].longd = "If the gorilla is there: There is a large gorilla by the ship's wheel. This gorilla is hostile. You can't approach the wheel. If the gorilla is not there: You are at the wheel.";
 	rooms[SHIPWHEEL].shortd = "You are at the ship's wheel";
@@ -239,7 +264,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[SHIPWHEEL].item.bananas = false;
 	rooms[SHIPWHEEL].item.treasure = false;
 	rooms[SHIPWHEEL].item.keys = false;
-	rooms[SHIPWHEEL].item.prisonor = false;
+
 
 	rooms[UPPERDECK].longd = "The top deck has a wheel at the north end of the ship, and the south end of the ship has a ladder down to the lower deck. ";
 	rooms[UPPERDECK].shortd = "You are at the upperdeck";
@@ -254,7 +279,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[UPPERDECK].item.bananas = false;
 	rooms[UPPERDECK].item.treasure = false;
 	rooms[UPPERDECK].item.keys = false;
-	rooms[UPPERDECK].item.prisonor = false;
+
 
 	rooms[BOTTOMDECK].longd = "The deck below is dimly lit, and smells musty. You can make out three doors. One is to the east, one is to the west, and one is a trapdoor below you.";
 	rooms[BOTTOMDECK].shortd = "You are at the bottomdeck";
@@ -269,7 +294,6 @@ void initialize(roomType rooms[NOROOM])
 	rooms[BOTTOMDECK].item.bananas = false;
 	rooms[BOTTOMDECK].item.treasure = false;
 	rooms[BOTTOMDECK].item.keys = false;
-	rooms[BOTTOMDECK].item.prisonor = false;
 
 	rooms[GALLEY].longd = "This is the galley. It is mostly empty, but in a shadowy corner you see a parrot sitting on a perch.";
 	rooms[GALLEY].shortd = "You are at the galley";
@@ -284,7 +308,6 @@ void initialize(roomType rooms[NOROOM])
 	rooms[GALLEY].item.bananas = false;
 	rooms[GALLEY].item.treasure = false;
 	rooms[GALLEY].item.keys = true;
-	rooms[GALLEY].item.prisonor = false;
 
 	rooms[BRIG].longd = "In this room there is a prisoner in a locked cell. He says,'Jack, I'm so glad you're alive. The captain locked me up for cheating at cards, which is the only reason the islanders didn't capture me. They killed everyone else. Now I guess we're the only two left, which makes you captain since you were first mate. Go find the keys to unlock this door, and we can sail out of here.'";
 	rooms[BRIG].shortd = "You are at the brig";
@@ -299,7 +322,6 @@ void initialize(roomType rooms[NOROOM])
 	rooms[BRIG].item.bananas = false;
 	rooms[BRIG].item.treasure = false;
 	rooms[BRIG].item.keys = false;
-	rooms[BRIG].item.prisonor = true;
 
 	rooms[CAPTAINQUARTERS].longd = "You are now at the captain's quarters and there is a bed and a table in this room.";
 	rooms[CAPTAINQUARTERS].shortd = "You are at the captain's quarters";
@@ -314,7 +336,6 @@ void initialize(roomType rooms[NOROOM])
 	rooms[CAPTAINQUARTERS].item.bananas = true;
 	rooms[CAPTAINQUARTERS].item.treasure = false;
 	rooms[CAPTAINQUARTERS].item.keys = false;
-	rooms[CAPTAINQUARTERS].item.prisonor = false;
 
 	rooms[CARGOHOLD].longd = "You've entered the cargo hold. There are barrels, a pile of tools, and a trunk. (Treasure is in the trunk.)";
 	rooms[CARGOHOLD].shortd = "You are at the cargohold";
@@ -329,6 +350,5 @@ void initialize(roomType rooms[NOROOM])
 	rooms[CARGOHOLD].item.bananas = true;
 	rooms[CARGOHOLD].item.treasure = true;
 	rooms[CARGOHOLD].item.keys = false;
-	rooms[CARGOHOLD].item.prisonor = false;
 
 }
