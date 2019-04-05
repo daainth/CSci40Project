@@ -41,8 +41,8 @@ struct roomType {
 	bool returning;//Checks if user has been here before for the descriptions
 };
 
-struct currentRoom {
-	itemlist items;
+struct inventory {
+	itemlist item;
 };
 
 
@@ -53,7 +53,7 @@ void execute(string, rooms&, rooms, roomType[NOROOM]); // roomType has an & next
 int main()
 {
 	string command;
-	roomType room[NOROOM];
+	roomType room[NOROOM],inventory;
 	rooms currentRoom, lastRoom;
 	command = "empty";
 
@@ -98,27 +98,46 @@ int main()
 // This needs to be rewritten because it only works with one word at the moment
 void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[NOROOM])
 {
-	if (command == "south" or command == "s")
+    inventory inv;
+    string word[10];
+    int blank, i, j;
+    command=command+" ";
+    i=0;
+    while (command!="")
+    {
+        blank=command.find(' ');
+        word[i]=command.substr(0, blank);
+        command=command.erase(0, blank+1);
+        i++;
+    }
+    for(j=0; j<i; j++)
+    {
+        cout<<"Command Entered:"<<word[j]<<" ";
+    }
+    
+    cout<<endl;
+    
+	if (word[0] == "south" or word[0] == "s")
 	{
 		currentRoom = rooms[currentRoom].direction.south;
 	}
-	if (command == "east" or command == "e")
+	if (word[0] == "east" or word[0] == "e")
 	{
 		currentRoom = rooms[currentRoom].direction.east;
 	}
-	if (command == "west" or command == "w")
+	if (word[0] == "west" or word[0] == "w")
 	{
 		currentRoom = rooms[currentRoom].direction.west;
 	}
-	if (command == "north" or command == "n")
+	if (word[0] == "north" or word[0] == "n")
 	{
 		currentRoom = rooms[currentRoom].direction.north;
 	}
-	if (command == "up" or command == "u")
+	if (word[0] == "up" or word[0] == "u")
 	{
 		currentRoom = rooms[currentRoom].direction.up;
 	}
-	if (command == "down" or command == "d")
+	if (word[0] == "down" or word[0] == "d")
 	{
 		currentRoom = rooms[currentRoom].direction.down;
 	}
@@ -128,9 +147,22 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 		cout << "You can't go that way" << endl;
 		currentRoom = lastRoom;  //Sets current room to whatever room you were in before
 	}
-
-	rooms[lastRoom].returning = true;
-
+	if (word[0] == "take")
+	{
+	    if (word[1] == "keys")
+	    {
+	        if(rooms[currentRoom].item.keys)
+	        {
+	            rooms[currentRoom].item.keys = false;
+	            inv.item.keys = true;
+	            cout<<"You got the keys!"<<endl;
+	        }
+	        else
+	        cout<<"No keys here bucko"<<endl;
+	    }
+	}
+	else
+	cout<<"Enter a real command"<<endl;
 }
 
 
