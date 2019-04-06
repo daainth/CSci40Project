@@ -97,7 +97,6 @@ int main()
 }
 
 
-// This needs to be rewritten because it only works with one word at the moment
 void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[NOROOM],inventory& inv)
 {
     string word[10];
@@ -164,16 +163,16 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	    
 	    if (word[1] == "banana")
 	    {
-	        if(rooms[currentRoom].item.bananas)
+	        if(rooms[currentRoom].item.banana)
 	        {
 	            if(inv.item.knife)
 	            {
-	                if(rooms[currentRoom].item.bananas)
+	                if(rooms[currentRoom].item.banana)
 	                {
-	                    rooms[currentRoom].item.bananas = false;
-	                    inv.item.bananas = true;
+	                    rooms[currentRoom].item.banana = false;
+	                    inv.item.banana = true;
 	                    cout<<endl;
-	                    cout<<"You got a banana!"<<endl;;
+	                    cout<<"You cut down a banana!"<<endl;;
 	                }
 	                else
 	                    cout<<"No bananas here"<<endl;
@@ -181,8 +180,38 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	            else
 	            cout<<"You'll need a knife to cut these down."<<endl;
 	        }
+	        else
+	        cout<<"There are no bananas here buddy"<<endl;
+	    }
+	    
+	    if (word[1] == "knife" or word[1] == "blade")
+	    {
+	        if(rooms[currentRoom].item.knife)
+	        {
+	            rooms[currentRoom].item.knife = false;
+	            inv.item.knife = true;
+	            cout<<"You found a knife!"<<endl;
+	            
+	        }
+	        else
+	        cout<<"There is no knife here!"<<endl;
 	    }
     }
+    
+    if(word[0] == "eat")
+    {
+        if (word[1] == "banana")
+        {
+            if(inv.item.banana)
+            {
+                cout<<"chomp chomp chomp"<<endl;
+                cout<<"..."<<endl;
+                cout<<"You ate the banana!"<<endl;
+                inv.item.banana = false;
+            }
+        }
+    }
+    
     
 	if (word[0] =="drop" or word[0] == "place")    // DROP STUFF
 	{
@@ -199,6 +228,7 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	    cout<<"You dont have the keys"<<endl;
 	    
 	}
+	cout<<endl;
 }
 
 
