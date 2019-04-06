@@ -19,7 +19,7 @@ enum rooms { TREE, ISLAND, GANGPLANK, UPPERDECK, SHIPWHEEL, BOTTOMDECK, GALLEY, 
 
 struct itemlist {
 	bool knife;
-	bool bananas;
+	bool banana;
 	bool treasure;
 	bool keys;
 };
@@ -52,7 +52,7 @@ int main()
 {
     inventory inv;
     inv.item.knife = false;
-    inv.item.bananas = false;
+    inv.item.banana = false;
     inv.item.treasure = false;
     inv.item.keys = false;
 	string command;
@@ -245,7 +245,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[TREE].direction.down = NOROOM;
 	rooms[TREE].returning = false;
 	rooms[TREE].item.knife = false;
-	rooms[TREE].item.bananas = true;
+	rooms[TREE].item.banana = true;
 	rooms[TREE].item.treasure = false;
 	rooms[TREE].item.keys = false;
 
@@ -261,7 +261,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[ISLAND].direction.down = NOROOM;
 	rooms[ISLAND].returning = false;
 	rooms[ISLAND].item.knife = false;
-	rooms[ISLAND].item.bananas = false;
+	rooms[ISLAND].item.banana = false;
 	rooms[ISLAND].item.treasure = false;
 	rooms[ISLAND].item.keys = false;
 
@@ -276,7 +276,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[GANGPLANK].direction.down = NOROOM;
 	rooms[GANGPLANK].returning = false;
 	rooms[GANGPLANK].item.knife = false;
-	rooms[GANGPLANK].item.bananas = false;
+	rooms[GANGPLANK].item.banana = false;
 	rooms[GANGPLANK].item.treasure = false;
 	rooms[GANGPLANK].item.keys = false;
 
@@ -291,7 +291,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[SHIPWHEEL].direction.down = NOROOM;
 	rooms[SHIPWHEEL].returning = false;
 	rooms[SHIPWHEEL].item.knife = false;
-	rooms[SHIPWHEEL].item.bananas = false;
+	rooms[SHIPWHEEL].item.banana = false;
 	rooms[SHIPWHEEL].item.treasure = false;
 	rooms[SHIPWHEEL].item.keys = false;
 
@@ -306,7 +306,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[UPPERDECK].direction.down = BOTTOMDECK;
 	rooms[UPPERDECK].returning = false;
 	rooms[UPPERDECK].item.knife = false;
-	rooms[UPPERDECK].item.bananas = false;
+	rooms[UPPERDECK].item.banana = false;
 	rooms[UPPERDECK].item.treasure = false;
 	rooms[UPPERDECK].item.keys = false;
 
@@ -335,7 +335,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[GALLEY].direction.down = NOROOM;
 	rooms[GALLEY].returning = false;
 	rooms[GALLEY].item.knife = false;
-	rooms[GALLEY].item.bananas = false;
+	rooms[GALLEY].item.banana = false;
 	rooms[GALLEY].item.treasure = false;
 	rooms[GALLEY].item.keys = true;
 
@@ -349,7 +349,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[BRIG].direction.down = NOROOM;
 	rooms[BRIG].returning = false;
 	rooms[BRIG].item.knife = false;
-	rooms[BRIG].item.bananas = false;
+	rooms[BRIG].item.banana = false;
 	rooms[BRIG].item.treasure = false;
 	rooms[BRIG].item.keys = false;
 
@@ -363,7 +363,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[CAPTAINQUARTERS].direction.down = NOROOM;
 	rooms[CAPTAINQUARTERS].returning = false;
 	rooms[CAPTAINQUARTERS].item.knife = true;
-	rooms[CAPTAINQUARTERS].item.bananas = true;
+	rooms[CAPTAINQUARTERS].item.banana= true;
 	rooms[CAPTAINQUARTERS].item.treasure = false;
 	rooms[CAPTAINQUARTERS].item.keys = false;
 
@@ -377,7 +377,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[CARGOHOLD].direction.down = NOROOM;
 	rooms[CARGOHOLD].returning = false;
 	rooms[CARGOHOLD].item.knife = false;
-	rooms[CARGOHOLD].item.bananas = true;
+	rooms[CARGOHOLD].item.banana = true;
 	rooms[CARGOHOLD].item.treasure = true;
 	rooms[CARGOHOLD].item.keys = false;
 
