@@ -1,0 +1,111 @@
+//File which contains descriptions
+
+#include <iostream>
+#include <fstream>
+#include <iso646.h>
+#include <string>
+using namespace std;
+
+
+int main()
+{
+	ifstream myfile;
+	int description,room;
+	string lines[10];
+	room = 0;
+
+	description = 0;
+	myfile.open("description.txt");
+	while (not myfile.eof() and description<10)
+	{
+		getline(myfile, lines[description]);
+		description++;
+	}
+	myfile.close();
+	cin >> room;
+
+	switch (room)
+	{
+	case 1: //Tree
+	{
+		cout << lines[0] << endl;
+		break;
+	}
+
+	case 2: //Island
+	{
+		cout << lines[1] << endl;
+		break;
+	}
+
+	case 3: //Gangplank
+	{
+		cout << lines[2] << endl;
+		break;
+	}
+
+	case 4: //Upperdeck
+	{
+		cout << lines[3] << endl;
+		break;
+
+	}
+
+	case 5: //Shipwheel
+	{
+		cout << lines[4] << endl;
+		break;
+	}
+
+	case 6: //Bottomdeck
+	{
+		cout << lines[5] << endl;
+		break;
+	}
+
+	case 7: //Galley
+	{
+		cout << lines[6] << endl;
+		break;
+	}
+
+	case 8: //Brig
+	{
+		cout << lines[7] << endl;
+		break;
+	}
+
+	case 9: //Captain Quarters
+	{
+		cout << lines[8] << endl;
+		break;
+
+	}
+
+	case 10: //Cargohold
+	{
+		cout << lines[9] << endl;
+		break;
+	}
+
+	default: //NoRoom
+	{
+		cout << "You can't go here, try again." << endl;
+		break;
+	}
+	}
+
+	return 0;
+}
+
+
+There is a large banana tree here. (There is one bunch of ripe bananas on the tree within reach.)
+The island is forested with banana trees. Most of the bananas are green, but one tree to your west might have ripe bananas. There are ominous drums in the background. There is a ship to your east with a gangplank to the shore
+You are aboard the Gangplank. The ocean surrounds you. To your east is the entrance to the ship's upperdeck.
+If the gorilla is there: There is a large gorilla by the ship's wheel. This gorilla is hostile. You can't approach the wheel. If the gorilla is not there: You are at the wheel.
+The top deck has a wheel at the north end of the ship, and the south end of the ship has a ladder down to the lower deck.
+The deck below is dimly lit, and smells musty. You can make out three doors. One is to the east, one is to the west, and one is a trapdoor below you.
+This is the galley. It is mostly empty, but in a shadowy corner you see a parrot sitting on a perch.
+In this room there is a prisoner in a locked cell. He says,'Jack, I'm so glad you're alive. The captain locked me up for cheating at cards, which is the only reason the islanders didn't capture me. They killed everyone else. Now I guess we're the only two left, which makes you captain since you were first mate. Go find the keys to unlock this door, and we can sail out of here.
+You are now at the captain's quarters and there is a bed and a table in this room.
+You've entered the cargo hold. There are barrels, a pile of tools, and a trunk.
