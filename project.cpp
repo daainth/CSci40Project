@@ -100,7 +100,7 @@ int main()
 void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[NOROOM],inventory& inv)
 {
     string word[10];
-    int blank, i, j;
+    int blank, i;
     command=command+" ";
     i=0;
     while (command!="")
@@ -321,7 +321,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[BOTTOMDECK].direction.down = BRIG;
 	rooms[BOTTOMDECK].returning = false;
 	rooms[BOTTOMDECK].item.knife = false;
-	rooms[BOTTOMDECK].item.bananas = false;
+	rooms[BOTTOMDECK].item.banana = false;
 	rooms[BOTTOMDECK].item.treasure = false;
 	rooms[BOTTOMDECK].item.keys = false;
 
