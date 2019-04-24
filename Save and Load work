@@ -678,7 +678,7 @@ void initializeStatus(roomType RoomStatus[NOROOM], inventory& inv, puzzle& puz) 
 	RoomStatus[GALLEY].item.knife = false;
 	RoomStatus[GALLEY].item.banana = false;
 	RoomStatus[GALLEY].item.treasure = false;
-	RoomStatus[GALLEY].item.keys = true;
+	RoomStatus[GALLEY].item.keys = false;
 	
 	RoomStatus[BRIG].returning = false;
 	RoomStatus[BRIG].item.knife = false;
