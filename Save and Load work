@@ -115,10 +115,63 @@ int main()
 		if (room[currentRoom].returning)
 		{
 			cout << room[currentRoom].shortd << endl << endl;
+			if (currentRoom == CAPTAINQUARTERS and !inv.item.knife)
+			{
+				cout << "(There is a knife on the table.)" << endl;
+				if (puz.parrot)
+				{
+					cout << "(There are keys in the secret compartment)" << endl;
+				}
+			}
+			if (currentRoom == CAPTAINQUARTERS)
+			{
+				if (puz.parrot)
+				{
+					cout << "(There are keys in the secret compartment)" << endl;
+				}
+			}
+			if (currentRoom == CARGOHOLD and !inv.item.treasure)
+			{
+				cout << "(Treasure is in the trunk.)" << endl;
+			}
+			if (currentRoom == SHIPWHEEL and !puz.gorilla)
+			{
+				cout << "You are near the wheel" << endl;
+			}
+			else
+			{
+				if (currentRoom == SHIPWHEEL and puz.gorilla)
+				{
+					cout << "You are at the wheel" << endl;
+				}
+			}
 		}
 		else
 		{
 			cout << room[currentRoom].longd << endl << endl;
+			if (currentRoom == CAPTAINQUARTERS and !inv.item.knife)
+			{
+				cout << "(There is a knife on the table.)" << endl;
+				if (puz.parrot)
+				{
+					cout << "(There are keys in the secret compartment)" << endl;
+				}
+			}
+			if (currentRoom == CARGOHOLD and !inv.item.treasure)
+			{
+				cout << "(Treasure is in the trunk.)" << endl;
+			}
+			if (currentRoom == SHIPWHEEL and !puz.gorilla)
+			{
+				cout << "You are near the wheel" << endl;
+			}
+			else
+			{
+				if (currentRoom == SHIPWHEEL and puz.gorilla)
+				{
+					cout << "You are at the wheel" << endl;
+				}
+			}
 		}
 
 
@@ -469,8 +522,8 @@ void initialize(roomType rooms[NOROOM])
 	rooms[CARGOHOLD].direction.up = NOROOM;
 	rooms[CARGOHOLD].direction.down = NOROOM;
 
-	rooms[LADDER].longd = "You're by the ladder. South of you is the Captain's Quarters. Below you is the lower deck. North of you is the ship' wheel.   ";
-	rooms[LADDER].shortd = " You're near the ladder. ";
+	rooms[LADDER].longd = "You're by the ladder on the upper deck. South of you is the Captain's Quarters. Below you is the lower deck. North of you is the ship' wheel.   ";
+	rooms[LADDER].shortd = " You're near the ladder on the upper deck. ";
 	rooms[LADDER].direction.north = UPPERDECK;
 	rooms[LADDER].direction.south = CAPTAINQUARTERS;
 	rooms[LADDER].direction.east = NOROOM;
@@ -753,7 +806,7 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 		currentRoom = rooms[currentRoom].direction.down;
 	}
 
-	if (currentRoom == CAPTAINQUARTERS and !inv.item.knife)
+	/*if (currentRoom == CAPTAINQUARTERS and !inv.item.knife)
 	{
 		cout << "(There is a knife on the table.)" << endl;
 		if (puz.parrot)
@@ -764,13 +817,12 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	if (currentRoom == CARGOHOLD and !inv.item.treasure)
 	{
 		cout << "(Treasure is in the trunk.)" << endl;
-	}
+	}*/
 
 
 	//SHIPWHEEL/Gorrila puzzle
 	if (currentRoom == SHIPWHEEL and !puz.gorilla)
 	{
-		cout << "You are near the wheel" << endl;
 		if (word[0] == "give" or word[0] == "feed")
 		{
 			if (word[1] == "bananas" or word[1] == "banana" or word[1] == "gorilla")
@@ -914,10 +966,6 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 				{
 					cout << "The natives do not accept your offering" << endl << endl;
 				}
-				else
-				{
-					cout << "You can't do that or you need to be more specific" << endl;
-				}
 			}
 		}
 	}
@@ -969,10 +1017,6 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 				cout << "No keys here bucko" << endl;
 			}
 		}
-		else
-		{
-			cout << "You can't do that or you need to be more specific" << endl;
-		}
 
 
 		if (word[1] == "banana" or word[1] == "bananas")
@@ -996,10 +1040,6 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 			else
 				cout << "There are no bananas here buddy." << endl;
 		}
-		else
-		{
-			cout << "You can't do that or you need to be more specific" << endl;
-		}
 
 
 		if (word[1] == "knife" or word[1] == "blade")
@@ -1014,10 +1054,6 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 			else
 				cout << "There is no knife here!" << endl;
 		}
-		else
-		{
-			cout << "You can't do that or you need to be more specific" << endl;
-		}
 		if (word[1] == "treasure")
 		{
 			if (rooms[currentRoom].item.treasure)
@@ -1027,14 +1063,6 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 				cout << "You take the treasure!" << endl;
 			}
 		}
-		else
-		{
-			cout << "You can't do that or you need to be more specific" << endl;
-		}
-	}
-	else
-	{
-		cout << "You can't do that or you need to be more specific" << endl;
 	}
 
 	if (word[0] == "eat")
@@ -1120,6 +1148,7 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	if (word[0] == "look")
 	{
 		cout << rooms[currentRoom].longd << endl << endl;
+		cout << "In this room there is :" << endl;
 		if (rooms[currentRoom].item.banana)
 		{
 			cout << "Banana" << endl;
@@ -1136,12 +1165,13 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 		{
 			cout << "Treasure" << endl;
 		}
-		if (puz.gorilla)
+		if (puz.gorilla and currentRoom==SHIPWHEEL)
 		{
 			cout << "You are at the wheel. To your south is the upper deck" << endl;
 		}
 		else
 		{
+			if(!puz.gorilla and currentRoom==SHIPWHEEL)
 			cout << "The gorilla blocks your path, you are near the wheel" << endl;
 		}
 	}
