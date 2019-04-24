@@ -8,7 +8,7 @@ string Vend = "yay";
 string Cend = "ay";
 
 //Eventually possibly include "Ocean" to rooms
-enum rooms { TREE, ISLAND, GANGPLANK, UPPERDECK, SHIPWHEEL, BOTTOMDECK, GALLEY, BRIG, CAPTAINQUARTERS, CARGOHOLD,LADDER, NOROOM };
+enum rooms { TREE, ISLAND, GANGPLANK, UPPERDECK, SHIPWHEEL, BOTTOMDECK, GALLEY, BRIG, CAPTAINQUARTERS, CARGOHOLD, LADDER, NOROOM };
 
 struct itemlist {
 	bool knife;
@@ -65,6 +65,7 @@ void initializeStatus(roomType[], inventory&,puzzle&);
 void loadGame(ifstream&, inventory&,rooms&,roomType[],puzzle&);
 
 void saveGame(ofstream&,inventory, rooms, roomType[], puzzle);
+
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -152,10 +153,11 @@ int main()
 	return 0;
 }
 
+
 void loadGame(ifstream& load, inventory& inv, rooms& current,roomType rooms[NOROOM],puzzle& puz)
 {
     
-    char line[66];
+    char line[65];
     int place = 0;
     int i = 0;
     while (!load.eof())
@@ -255,7 +257,6 @@ void loadGame(ifstream& load, inventory& inv, rooms& current,roomType rooms[NORO
         case '7': current = BRIG; break;
         case '8': current = CAPTAINQUARTERS; break;
         case '9': current = CARGOHOLD; break;
-        case 'a': current = LADDER; break;
         default: current = ISLAND;
     }
     
@@ -379,7 +380,7 @@ void initialize(roomType rooms[NOROOM])
 {
 
 	rooms[TREE].longd = "There is a large banana tree here. (There is one bunch of ripe bananas on the tree within reach.)";
-	rooms[TREE].shortd = "You are at the tree";
+	rooms[TREE].shortd = "You are at the tree. (There is one bunch of ripe bananas on the tree within reach.)";
 	rooms[TREE].direction.north = NOROOM;
 	rooms[TREE].direction.south = NOROOM;
 	rooms[TREE].direction.west = NOROOM;
@@ -405,8 +406,8 @@ void initialize(roomType rooms[NOROOM])
 	rooms[GANGPLANK].direction.up = NOROOM;
 	rooms[GANGPLANK].direction.down = NOROOM;
 
-	rooms[SHIPWHEEL].longd = "You are at the wheel.";
-	rooms[SHIPWHEEL].shortd = "You are at the wheel.";
+	rooms[SHIPWHEEL].longd = "";
+	rooms[SHIPWHEEL].shortd = "";
 	rooms[SHIPWHEEL].direction.north = NOROOM;
 	rooms[SHIPWHEEL].direction.south = UPPERDECK;
 	rooms[SHIPWHEEL].direction.west = NOROOM;
@@ -450,7 +451,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[BRIG].direction.up = BOTTOMDECK;
 	rooms[BRIG].direction.down = NOROOM;
 
-	rooms[CAPTAINQUARTERS].longd = "You are now at the captain's quarters and there is a bed and a table in this room.(There is a knife on the table.)";
+	rooms[CAPTAINQUARTERS].longd = "You are now at the captain's quarters and there is a bed and a table in this room.";
 	rooms[CAPTAINQUARTERS].shortd = "You are at the captain's quarters";
 	rooms[CAPTAINQUARTERS].direction.north = LADDER;
 	rooms[CAPTAINQUARTERS].direction.south = NOROOM;
@@ -459,7 +460,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[CAPTAINQUARTERS].direction.up = NOROOM;
 	rooms[CAPTAINQUARTERS].direction.down = NOROOM;
 
-	rooms[CARGOHOLD].longd = "You've entered the cargo hold. There are barrels, a pile of tools, and a trunk. (Treasure is in the trunk.)";
+	rooms[CARGOHOLD].longd = "You've entered the cargo hold. There are barrels, a pile of tools, and a trunk.";
 	rooms[CARGOHOLD].shortd = "You are at the cargohold";
 	rooms[CARGOHOLD].direction.north = NOROOM;
 	rooms[CARGOHOLD].direction.south = NOROOM;
@@ -751,10 +752,25 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	{
 		currentRoom = rooms[currentRoom].direction.down;
 	}
+	
+	if(currentRoom==CAPTAINQUARTERS and !inv.item.knife)
+	{
+	    cout<<"(There is a knife on the table.)"<<endl;
+	    if(puz.parrot)
+	    {
+	        cout<<"(There are keys in the secret compartment)"<<endl;
+	    }
+	}
+	if(currentRoom==CARGOHOLD and !inv.item.treasure)
+	{
+	    cout<<"(Treasure is in the trunk.)"<<endl;
+	}
+	
 
 	//SHIPWHEEL/Gorrila puzzle
 	if (currentRoom == SHIPWHEEL and !puz.gorilla)
 	{
+	    cout<<"You are near the wheel"<<endl;
 		if (word[0] == "give" or word[0] == "feed")
 		{
 			if (word[1] == "bananas" or word[1] == "banana" or word[1] == "gorilla")
@@ -821,7 +837,7 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	//Brig/Prisoner puzzle
 	if (currentRoom == BRIG and !puz.prisoner)
 	{
-		if (word[0] == "unlock" or word[0] == "free" or word[0] == "use")
+		if (word[0] == "unlock" or word[0] == "free" or word[0] == "use" or word[0]=="open")
 		{
 			if (word[1] == "prisoner" or word[1] == "cell" or word[1] == "key" or word[1] == "keys")
 			{
@@ -847,6 +863,18 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 				else
 				cout << "The cell remains locked" << endl << endl;
 			}
+		}
+		else
+		{
+		    if(inv.item.keys)
+		    {
+		        cout<<"You have keys you can use"<<endl;
+		    }
+		    else
+        	{
+        	    if(!inv.item.keys)
+        	    cout<<"You can't do that or you need to be more specific"<<endl;
+        	}
 		}
 	}
 
@@ -875,11 +903,21 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 						cout << "The natives do not accept your offering" << endl << endl;
 					}
 				}
+				else
+            	{
+            	    cout<<"You can't do that or you need to be more specific"<<endl;
+            	}
 			}
 			else
 			{
 				if (word[0] == "give" or word[0] == "offer")//Can make this specific to the item offered***
+				{
 				cout << "The natives do not accept your offering" << endl << endl;
+				}
+				else
+            	{
+            	    cout<<"You can't do that or you need to be more specific"<<endl;
+            	}
 			}
 		}
 	}
@@ -888,7 +926,7 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	{
 		if (currentRoom == SHIPWHEEL and puz.gorilla==true)
 		{
-			if (word[0] == "sail" or word[0] == "leave")
+			if (word[0] == "sail" or word[0] == "leave" or word[0]=="use")
 			{
 				if (puz.prisoner)
 				{
@@ -900,6 +938,10 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 					cout << "You may need another person to man the ship" << endl << endl;
 				}
 			}
+			else
+        	{
+        	    cout<<"You can't do that or you need to be more specific"<<endl;
+        	}
 		}
 	}
 
@@ -931,9 +973,13 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 				cout << "No keys here bucko" << endl;
 			}
 		}
+		else
+    	{
+    	    cout<<"You can't do that or you need to be more specific"<<endl;
+    	}
 
 
-		if (word[1] == "banana")
+		if (word[1] == "banana" or word[1] == "bananas")
 		{
 		    if(rooms[currentRoom].item.banana)
 		    {
@@ -954,6 +1000,10 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 		    else
 				cout << "There are no bananas here buddy." << endl;
         }
+        else
+	    {
+	        cout<<"You can't do that or you need to be more specific"<<endl;
+	    }
 		
 
 		if (word[1] == "knife" or word[1] == "blade")
@@ -962,12 +1012,16 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 			{
 				rooms[currentRoom].item.knife = false;
 				inv.item.knife = true;
-				cout << "You found a knife!" << endl;
+				cout << "You picked up a knife!" << endl;
 
 			}
 			else
 				cout << "There is no knife here!" << endl;
 		}
+		else
+    	{
+    	    cout<<"You can't do that or you need to be more specific"<<endl;
+    	}
 		if (word[1] == "treasure")
 		{
 			if (rooms[currentRoom].item.treasure)
@@ -977,6 +1031,14 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 				cout << "You take the treasure!" << endl;
 			}
 		}
+		else
+        {
+        	   cout<<"You can't do that or you need to be more specific"<<endl;
+        }
+	}
+	else
+	{
+	    cout<<"You can't do that or you need to be more specific"<<endl;
 	}
 
 	if (word[0] == "eat")
@@ -995,6 +1057,10 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 		}
 		else
 		cout<<"You broke a tooth!"<<endl;
+	}
+	else
+	{
+	    cout<<"You can't do that or you need to be more specific"<<endl;
 	}
 
 
@@ -1048,6 +1114,10 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 		
 
 	}
+	else
+	{
+	    cout<<"You can't do that or you need to be more specific"<<endl;
+	}
 	cout << endl;
 
 	if (word[0] == "help")
@@ -1062,6 +1132,30 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	if (word[0] == "look")
 	{
 		cout << rooms[currentRoom].longd << endl << endl;
+    	if (rooms[currentRoom].item.banana)
+    	{
+    		cout << "Banana" << endl;
+    	}
+    	if (rooms[currentRoom].item.keys)
+    	{
+    		cout << "Keys" << endl;
+    	}
+    	if (rooms[currentRoom].item.knife)
+    	{
+    		cout << "Knife" << endl;
+    	}
+    	if (rooms[currentRoom].item.treasure)
+    	{
+    		cout << "Treasure" << endl;
+    	}
+    	if(puz.gorilla)
+    	{
+    	    cout<<"You are at the wheel. To your south is the upper deck"<<endl;
+    	}
+    	else
+    	{
+    	    cout<<"The gorilla blocks your path, you are near the wheel"<<endl;
+    	}
 	}
 
 	if (word[0] == "inventory")
