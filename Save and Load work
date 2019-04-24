@@ -992,7 +992,7 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 
 	if (word[0] == "take" or word[0] == "grab" or word[0] == "pickup" or word[0] == "get")    // PICK UP STUFF
 	{
-		if (word[1] == "keys")
+		if (word[1] == "keys" or word[1]=="key")
 		{
 			if (rooms[currentRoom].item.keys)
 			{
@@ -1067,7 +1067,7 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 
 	if (word[0] == "eat")
 	{
-		if (word[1] == "banana")
+		if (word[1] == "banana" or word[1]=="bananas")
 		{
 			if (inv.item.banana)
 			{
@@ -1087,7 +1087,7 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	if (word[0] == "drop" or word[0] == "place")    // DROP STUFF
 	{
 
-		if (word[1] == "keys")
+		if (word[1] == "keys" or word[1]=="key")
 		{
 			if (inv.item.keys)
 			{
@@ -1120,7 +1120,7 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 			else
 				cout << "You don't have that item" << endl;
 		}
-		if (word[1] == "banana")
+		if (word[1] == "banana" or word[1]=="bananas")
 		{
 			if (inv.item.banana)
 			{
@@ -1155,6 +1155,7 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 		}
 		if (rooms[currentRoom].item.keys)
 		{
+			if(puz.parrot)
 			cout << "Keys" << endl;
 		}
 		if (rooms[currentRoom].item.knife)
