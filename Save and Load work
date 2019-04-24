@@ -8,7 +8,7 @@ string Vend = "yay";
 string Cend = "ay";
 
 //Eventually possibly include "Ocean" to rooms
-enum rooms { TREE, ISLAND, GANGPLANK, UPPERDECK, SHIPWHEEL, BOTTOMDECK, GALLEY, BRIG, CAPTAINQUARTERS, CARGOHOLD, NOROOM };
+enum rooms { TREE, ISLAND, GANGPLANK, UPPERDECK, SHIPWHEEL, BOTTOMDECK, GALLEY, BRIG, CAPTAINQUARTERS, CARGOHOLD,LADDER, NOROOM };
 
 struct itemlist {
 	bool knife;
@@ -95,7 +95,10 @@ int main()
 	        loadGame(Load,inv, currentRoom,room,puz);
 	    }
 	    else
+	    {
 	        initializeStatus(room, inv, puz);    //  RESTART
+	    }
+	        
 	}
 	else
 	    initializeStatus(room, inv, puz);    // NEW GAME 
@@ -152,7 +155,7 @@ int main()
 void loadGame(ifstream& load, inventory& inv, rooms& current,roomType rooms[NOROOM],puzzle& puz)
 {
     
-    char line[60];
+    char line[66];
     int place = 0;
     int i = 0;
     while (!load.eof())
@@ -240,7 +243,7 @@ void loadGame(ifstream& load, inventory& inv, rooms& current,roomType rooms[NORO
     else
     puz.parrot = true;
     place++;
-    switch (line[place])
+    switch (line[place])     // SETS CURRENT ROOM
     {
         case '0': current = TREE; break;
         case '1': current = ISLAND; break;
@@ -252,6 +255,7 @@ void loadGame(ifstream& load, inventory& inv, rooms& current,roomType rooms[NORO
         case '7': current = BRIG; break;
         case '8': current = CAPTAINQUARTERS; break;
         case '9': current = CARGOHOLD; break;
+        case 'a': current = LADDER; break;
         default: current = ISLAND;
     }
     
@@ -413,7 +417,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[UPPERDECK].longd = "The top deck has a wheel at the north end of the ship, and the south end of the ship has a ladder down to the lower deck. ";
 	rooms[UPPERDECK].shortd = "You are at the upperdeck";
 	rooms[UPPERDECK].direction.north = SHIPWHEEL;
-	rooms[UPPERDECK].direction.south = CAPTAINQUARTERS;
+	rooms[UPPERDECK].direction.south = LADDER;
 	rooms[UPPERDECK].direction.west = GANGPLANK;
 	rooms[UPPERDECK].direction.east = NOROOM;
 	rooms[UPPERDECK].direction.up = NOROOM;
@@ -425,7 +429,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[BOTTOMDECK].direction.south = NOROOM;
 	rooms[BOTTOMDECK].direction.west = CARGOHOLD;
 	rooms[BOTTOMDECK].direction.east = GALLEY;
-	rooms[BOTTOMDECK].direction.up = UPPERDECK;
+	rooms[BOTTOMDECK].direction.up = LADDER;
 	rooms[BOTTOMDECK].direction.down = BRIG;
 
 	rooms[GALLEY].longd = "This is the galley. It is mostly empty, but in a shadowy corner you see a parrot sitting on a perch.";
@@ -448,7 +452,7 @@ void initialize(roomType rooms[NOROOM])
 
 	rooms[CAPTAINQUARTERS].longd = "You are now at the captain's quarters and there is a bed and a table in this room.(There is a knife on the table.)";
 	rooms[CAPTAINQUARTERS].shortd = "You are at the captain's quarters";
-	rooms[CAPTAINQUARTERS].direction.north = UPPERDECK;
+	rooms[CAPTAINQUARTERS].direction.north = LADDER;
 	rooms[CAPTAINQUARTERS].direction.south = NOROOM;
 	rooms[CAPTAINQUARTERS].direction.west = NOROOM;
 	rooms[CAPTAINQUARTERS].direction.east = NOROOM;
@@ -463,6 +467,15 @@ void initialize(roomType rooms[NOROOM])
 	rooms[CARGOHOLD].direction.west = NOROOM;
 	rooms[CARGOHOLD].direction.up = NOROOM;
 	rooms[CARGOHOLD].direction.down = NOROOM;
+	
+	rooms[LADDER].longd = "You're by the ladder. South of you is the Captain's Quarters. Below you is the lower deck. North of you is the ship' wheel.   ";
+	rooms[LADDER].shortd = " You're near the ladder. ";
+	rooms[LADDER].direction.north = UPPERDECK;
+	rooms[LADDER].direction.south = CAPTAINQUARTERS;
+	rooms[LADDER].direction.east = NOROOM;
+	rooms[LADDER].direction.west = NOROOM;
+	rooms[LADDER].direction.up = NOROOM;
+	rooms[LADDER].direction.down = BOTTOMDECK;
 }
 
 void parrot(string word[],int count)//Remove check
@@ -619,6 +632,12 @@ void initializeStatus(roomType RoomStatus[NOROOM], inventory& inv, puzzle& puz) 
 	inv.item.knife = false;
 	inv.item.banana = false;
 	
+	RoomStatus[LADDER].returning = false;
+	RoomStatus[LADDER].item.knife = false;
+	RoomStatus[LADDER].item.banana = false;
+	RoomStatus[LADDER].item.treasure = false;
+	RoomStatus[LADDER].item.keys = false;
+	
     RoomStatus[TREE].returning = false;
 	RoomStatus[TREE].item.knife = false;
 	RoomStatus[TREE].item.banana = true;
@@ -671,7 +690,7 @@ void initializeStatus(roomType RoomStatus[NOROOM], inventory& inv, puzzle& puz) 
 	RoomStatus[CAPTAINQUARTERS].item.knife = true;
 	RoomStatus[CAPTAINQUARTERS].item.banana = false;
 	RoomStatus[CAPTAINQUARTERS].item.treasure = false;
-	RoomStatus[CAPTAINQUARTERS].item.keys = false;
+	RoomStatus[CAPTAINQUARTERS].item.keys = true;
 
 	RoomStatus[CARGOHOLD].returning = false;
 	RoomStatus[CARGOHOLD].item.knife = false;
