@@ -1,4 +1,4 @@
- #include <iostream>
+#include <iostream>
 #include <fstream>
 #include <iso646.h>
 #include <string>
@@ -48,7 +48,7 @@ void initialize(roomType[]);    // Has to be roomtype[NOROOM] for some reason
 
 void execute(string, rooms&, rooms, roomType[], inventory&, puzzle&, int&); // rooms has an & next to it because we need the function to return the current room
 
-void parrot(string[],int);//PigLatin
+void parrot(string[], int);//PigLatin
 
 int check(string);//PigLatin
 
@@ -60,19 +60,19 @@ bool pwordcheck(string[]);
 
 void invent(inventory);
 
-void initializeStatus(roomType[], inventory&,puzzle&);
+void initializeStatus(roomType[], inventory&, puzzle&);
 
-void loadGame(ifstream&, inventory&,rooms&,roomType[],puzzle&);
+void loadGame(ifstream&, inventory&, rooms&, roomType[], puzzle&);
 
-void saveGame(ofstream&,inventory, rooms, roomType[], puzzle);
+void saveGame(ofstream&, inventory, rooms, roomType[], puzzle);
 
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 
 int main()
 {
-    ofstream Save;
-    ifstream Load("SaveFile.txt");
+	ofstream Save;
+	ifstream Load("SaveFile.txt");
 	inventory inv;
 	puzzle puz;
 	int gameCheck;
@@ -84,29 +84,29 @@ int main()
 	char LoadAnswer;
 	initialize(room);                        // initialize sets everything up from the start of the game
 	currentRoom = ISLAND;
-	
+
 	if (Load.is_open())
 	{
-	    cout << "A saved game exists. Would you like to load this?"<<endl;
-	    LoadAnswer = cin.get();
-	    cin.ignore(999,'\n');
-	    if(tolower(LoadAnswer) == 'y' or tolower(LoadAnswer) == 'l')
-	    {
-	        cout << "DATA LOADED"<<endl;
-	        loadGame(Load,inv, currentRoom,room,puz);
-	    }
-	    else
-	    {
-	        initializeStatus(room, inv, puz);    //  RESTART
-	    }
-	        
+		cout << "A saved game exists. Would you like to load this?" << endl;
+		LoadAnswer = cin.get();
+		cin.ignore(999, '\n');
+		if (tolower(LoadAnswer) == 'y' or tolower(LoadAnswer) == 'l')
+		{
+			cout << "DATA LOADED" << endl;
+			loadGame(Load, inv, currentRoom, room, puz);
+		}
+		else
+		{
+			initializeStatus(room, inv, puz);    //  RESTART
+		}
+
 	}
 	else
-	    initializeStatus(room, inv, puz);    // NEW GAME 
-	
+		initializeStatus(room, inv, puz);    // NEW GAME 
 
-	
-    lastRoom = currentRoom;
+
+
+	lastRoom = currentRoom;
 
 	gameOver = command == "quit";
 
@@ -123,15 +123,15 @@ int main()
 
 
 		getline(cin, command);
-		
-		
-		
+
+
+
 		if (command == "save")     // This was hard to put into the execute funtion so instead it was put into main.
-	    {
-	        saveGame(Save, inv,currentRoom,room,puz);
-	    }
-	    else
-		    execute(command, currentRoom, lastRoom, room, inv, puz, gameCheck); 	// First send command. Then currentRoom. Then lastRoom. Then send room information. Then send player inventory. Then puzzle status. 
+		{
+			saveGame(Save, inv, currentRoom, room, puz);
+		}
+		else
+			execute(command, currentRoom, lastRoom, room, inv, puz, gameCheck); 	// First send command. Then currentRoom. Then lastRoom. Then send room information. Then send player inventory. Then puzzle status. 
 
 
 
@@ -154,224 +154,224 @@ int main()
 }
 
 
-void loadGame(ifstream& load, inventory& inv, rooms& current,roomType rooms[NOROOM],puzzle& puz)
+void loadGame(ifstream& load, inventory& inv, rooms& current, roomType rooms[NOROOM], puzzle& puz)
 {
-    
-    char line[65];
-    int place = 0;
-    int i = 0;
-    while (!load.eof())
-    {
-        line[i]=load.get();
-        load.ignore(256,'\n');
-        i++;
-    }
 
-        for(i=0;i<=NOROOM-1;i++)
-        {
-            if (line[place] == 'T')
-                rooms[i].item.banana = true;
-            else
-                rooms[i].item.banana = false;
-            place++;    
-            
-            if(line[place] == 'T')
-                rooms[i].item.knife= true;
-            else
-                rooms[i].item.knife = false;
-            place++;    
-            
-            if (line[place] == 'T')
-                rooms[i].item.treasure = true;
-            else
-                rooms[i].item.treasure = false;
-            place++;      
-            
-            if (line[place] == 'T')
-                rooms[i].item.keys = true;
-            else
-                rooms[i].item.keys = false;
-            place++;      
-            
-            if(line[place] == 'T')
-                rooms[i].returning = true;
-            else
-                rooms[i].returning = false;
-            place++;
-        }
+	char line[65];
+	int place = 0;
+	int i = 0;
+	while (!load.eof())
+	{
+		line[i] = load.get();
+		load.ignore(256, '\n');
+		i++;
+	}
 
-    
-    if(line[place] == 'T')
-        inv.item.banana = true;
-    else
-        inv.item.banana = false;    
-    place++;
-    
-    if(line[place] == 'T')
-        inv.item.knife = true;
-    else
-        inv.item.knife = false;
-    place++;
-    
-    if(line[place] == 'T')
-        inv.item.treasure = true;
-    else
-        inv.item.treasure = false;
-    place++;
-    if(line[place] == 'T')
-        inv.item.keys = true;
-    else
-        inv.item.keys = false;
-    place++;
-    
-    
-    if(line[place] == 'T')
-        puz.gorilla = true;
-    else
-        puz.gorilla = false;
-    place++;
-    if(line[place] == 'T')
-    puz.prisoner = true;
-    else
-    puz.prisoner = false;
-    place++;
-    if(line[place] == 'T')
-    puz.natives = true;
-    else
-    puz.natives = false;
-    place++;
-    if(line[place] == 'T')
-    puz.parrot = true;
-    else
-    puz.parrot = true;
-    place++;
-    switch (line[place])     // SETS CURRENT ROOM
-    {
-        case '0': current = TREE; break;
-        case '1': current = ISLAND; break;
-        case '2': current = GANGPLANK; break;
-        case '3': current = UPPERDECK; break;
-        case '4': current = SHIPWHEEL; break;
-        case '5': current = BOTTOMDECK; break;
-        case '6': current = GALLEY; break;
-        case '7': current = BRIG; break;
-        case '8': current = CAPTAINQUARTERS; break;
-        case '9': current = CARGOHOLD; break;
-        default: current = ISLAND;
-    }
-    
+	for (i = 0; i <= NOROOM - 1; i++)
+	{
+		if (line[place] == 'T')
+			rooms[i].item.banana = true;
+		else
+			rooms[i].item.banana = false;
+		place++;
+
+		if (line[place] == 'T')
+			rooms[i].item.knife = true;
+		else
+			rooms[i].item.knife = false;
+		place++;
+
+		if (line[place] == 'T')
+			rooms[i].item.treasure = true;
+		else
+			rooms[i].item.treasure = false;
+		place++;
+
+		if (line[place] == 'T')
+			rooms[i].item.keys = true;
+		else
+			rooms[i].item.keys = false;
+		place++;
+
+		if (line[place] == 'T')
+			rooms[i].returning = true;
+		else
+			rooms[i].returning = false;
+		place++;
+	}
+
+
+	if (line[place] == 'T')
+		inv.item.banana = true;
+	else
+		inv.item.banana = false;
+	place++;
+
+	if (line[place] == 'T')
+		inv.item.knife = true;
+	else
+		inv.item.knife = false;
+	place++;
+
+	if (line[place] == 'T')
+		inv.item.treasure = true;
+	else
+		inv.item.treasure = false;
+	place++;
+	if (line[place] == 'T')
+		inv.item.keys = true;
+	else
+		inv.item.keys = false;
+	place++;
+
+
+	if (line[place] == 'T')
+		puz.gorilla = true;
+	else
+		puz.gorilla = false;
+	place++;
+	if (line[place] == 'T')
+		puz.prisoner = true;
+	else
+		puz.prisoner = false;
+	place++;
+	if (line[place] == 'T')
+		puz.natives = true;
+	else
+		puz.natives = false;
+	place++;
+	if (line[place] == 'T')
+		puz.parrot = true;
+	else
+		puz.parrot = true;
+	place++;
+	switch (line[place])     // SETS CURRENT ROOM
+	{
+	case '0': current = TREE; break;
+	case '1': current = ISLAND; break;
+	case '2': current = GANGPLANK; break;
+	case '3': current = UPPERDECK; break;
+	case '4': current = SHIPWHEEL; break;
+	case '5': current = BOTTOMDECK; break;
+	case '6': current = GALLEY; break;
+	case '7': current = BRIG; break;
+	case '8': current = CAPTAINQUARTERS; break;
+	case '9': current = CARGOHOLD; break;
+	default: current = ISLAND;
+	}
+
 }
 
 
 
-void saveGame(ofstream& Save, inventory inv, rooms current , roomType rooms[NOROOM], puzzle puz)    /// This is the save feature 
+void saveGame(ofstream& Save, inventory inv, rooms current, roomType rooms[NOROOM], puzzle puz)    /// This is the save feature 
 {
-    Save.open("SaveFile.txt");
-    int i;
-    
-    for ( i=0; i<=NOROOM-1;i++)    // Cycles the number of rooms and checks if items are in that room and prints true or false
-    {
-        if (rooms[i].item.banana)
-            Save<<"TRUE banana for room "<<i<<endl;
-        else
-            Save<<"FALSE banana for room "<<i<<endl;
-            
-        if (rooms[i].item.knife)
-            Save<<"TRUE knife for room "<<i<<endl;
-        else
-            Save<< "FALSE knife for room "<<i<<endl;
-        
-        if (rooms[i].item.treasure)
-            Save<<"TRUE treasure for room "<<i<<endl;
-        else
-            Save<<"FALSE treasure for room "<<i<<endl;
-        
-        if(rooms[i].item.keys)
-            Save<<"TRUE keys for room "<<i<<endl;
-        else
-            Save<<"FALSE keys for room "<<i<<endl;
-        
-        if (rooms[i].returning)
-            Save<<"TRUE returning for room "<<i<<endl;
-        else
-            Save<<"FALSE returning for room "<<i<<endl;
-    }
-    
-    
-    if (inv.item.banana)     // This checks the inventory of the player
-    {
-        Save <<"TRUE banana for inventory "<<endl;
-    }
-    else 
-    {
-        Save <<"FALSE banana for inventory "<<endl;
-    }
-    if(inv.item.knife)
-    {
-        Save <<"TRUE knife for inventory "<<endl;
-    }
-    else
-    {
-        Save<<"FALSE knife for inventory "<<endl;
-    }
-    if (inv.item.treasure)
-    {
-        Save<<"TRUE treasure for inventory "<<endl;
-    }
-    else
-    {
-        Save<<"FALSE treasure for inventory "<<endl;
-    }
-    if (inv.item.keys)
-    {
-        Save<<"TRUE keys for inventory "<<endl;
-    }
-    else
-    {
-        Save<< "FALSE keys for inventory "<<endl;
-    }
-    
-    
-    if (puz.gorilla)    // PUZZLE STATUS
-    {
-        Save <<"TRUE gorilla"<<endl;
-    }
-    else
-    {
-        Save <<"FALSE gorilla"<<endl;
-    }
-    if(puz.prisoner)
-    {
-        Save <<"TRUE prisoner"<<endl;
-    }
-    else
-    {
-        Save<<"FALSE prisoner"<<endl;
-    }
-    if(puz.natives)
-    {
-        Save <<"TRUE natives"<<endl;
-    }
-    else
-    {
-        Save << "FALSE natives"<<endl;    
-    }
-    if(puz.parrot)
-    {
-        Save << "TRUE parrot"<<endl;
-    }
-    else
-    {
-        Save<< "FALSE parrot"<<endl;
-    }
-    
-    Save<<current<<endl;  // This keeps track of the current location of the player. It will print a number 
-    
-    cout<<endl;
-    cout<<"...Saving..."<<endl;
-    cout<<"You saved the game!"<<endl;
-    cout<<endl;
-    
+	Save.open("SaveFile.txt");
+	int i;
+
+	for (i = 0; i <= NOROOM - 1; i++)    // Cycles the number of rooms and checks if items are in that room and prints true or false
+	{
+		if (rooms[i].item.banana)
+			Save << "TRUE banana for room " << i << endl;
+		else
+			Save << "FALSE banana for room " << i << endl;
+
+		if (rooms[i].item.knife)
+			Save << "TRUE knife for room " << i << endl;
+		else
+			Save << "FALSE knife for room " << i << endl;
+
+		if (rooms[i].item.treasure)
+			Save << "TRUE treasure for room " << i << endl;
+		else
+			Save << "FALSE treasure for room " << i << endl;
+
+		if (rooms[i].item.keys)
+			Save << "TRUE keys for room " << i << endl;
+		else
+			Save << "FALSE keys for room " << i << endl;
+
+		if (rooms[i].returning)
+			Save << "TRUE returning for room " << i << endl;
+		else
+			Save << "FALSE returning for room " << i << endl;
+	}
+
+
+	if (inv.item.banana)     // This checks the inventory of the player
+	{
+		Save << "TRUE banana for inventory " << endl;
+	}
+	else
+	{
+		Save << "FALSE banana for inventory " << endl;
+	}
+	if (inv.item.knife)
+	{
+		Save << "TRUE knife for inventory " << endl;
+	}
+	else
+	{
+		Save << "FALSE knife for inventory " << endl;
+	}
+	if (inv.item.treasure)
+	{
+		Save << "TRUE treasure for inventory " << endl;
+	}
+	else
+	{
+		Save << "FALSE treasure for inventory " << endl;
+	}
+	if (inv.item.keys)
+	{
+		Save << "TRUE keys for inventory " << endl;
+	}
+	else
+	{
+		Save << "FALSE keys for inventory " << endl;
+	}
+
+
+	if (puz.gorilla)    // PUZZLE STATUS
+	{
+		Save << "TRUE gorilla" << endl;
+	}
+	else
+	{
+		Save << "FALSE gorilla" << endl;
+	}
+	if (puz.prisoner)
+	{
+		Save << "TRUE prisoner" << endl;
+	}
+	else
+	{
+		Save << "FALSE prisoner" << endl;
+	}
+	if (puz.natives)
+	{
+		Save << "TRUE natives" << endl;
+	}
+	else
+	{
+		Save << "FALSE natives" << endl;
+	}
+	if (puz.parrot)
+	{
+		Save << "TRUE parrot" << endl;
+	}
+	else
+	{
+		Save << "FALSE parrot" << endl;
+	}
+
+	Save << current << endl;  // This keeps track of the current location of the player. It will print a number 
+
+	cout << endl;
+	cout << "...Saving..." << endl;
+	cout << "You saved the game!" << endl;
+	cout << endl;
+
 }
 
 
@@ -468,7 +468,7 @@ void initialize(roomType rooms[NOROOM])
 	rooms[CARGOHOLD].direction.west = NOROOM;
 	rooms[CARGOHOLD].direction.up = NOROOM;
 	rooms[CARGOHOLD].direction.down = NOROOM;
-	
+
 	rooms[LADDER].longd = "You're by the ladder. South of you is the Captain's Quarters. Below you is the lower deck. North of you is the ship' wheel.   ";
 	rooms[LADDER].shortd = " You're near the ladder. ";
 	rooms[LADDER].direction.north = UPPERDECK;
@@ -479,11 +479,11 @@ void initialize(roomType rooms[NOROOM])
 	rooms[LADDER].direction.down = BOTTOMDECK;
 }
 
-void parrot(string word[],int count)//Remove check
+void parrot(string word[], int count)//Remove check
 {
 	int i;
 	i = 0;
-	while (i<=count-1)
+	while (i <= count - 1)
 	{
 		cout << piglatin(word[i]) << " ";
 		i++;
@@ -616,42 +616,42 @@ bool pwordcheck(string pword[])
 
 void initializeStatus(roomType RoomStatus[NOROOM], inventory& inv, puzzle& puz)   // This function only occurs if there is no save game. So basically this is the start of the game.
 {
-    
-    cout << "You have just awakened on a strange island with a terrible headache." << endl;
+
+	cout << "You have just awakened on a strange island with a terrible headache." << endl;
 	cout << "You can't remember anything about yourself or where you are." << endl;
 	cout << "Type 'help' to view instructions" << endl;
 	cout << endl;
-	
-    puz.knife = false;
+
+	puz.knife = false;
 	puz.gorilla = false;
 	puz.natives = false;
 	puz.parrot = false;
 	puz.prisoner = false;
-	
+
 	inv.item.keys = false;
 	inv.item.treasure = false;
 	inv.item.knife = false;
 	inv.item.banana = false;
-	
+
 	RoomStatus[LADDER].returning = false;
 	RoomStatus[LADDER].item.knife = false;
 	RoomStatus[LADDER].item.banana = false;
 	RoomStatus[LADDER].item.treasure = false;
 	RoomStatus[LADDER].item.keys = false;
-	
-    RoomStatus[TREE].returning = false;
+
+	RoomStatus[TREE].returning = false;
 	RoomStatus[TREE].item.knife = false;
 	RoomStatus[TREE].item.banana = true;
 	RoomStatus[TREE].item.treasure = false;
 	RoomStatus[TREE].item.keys = false;
-	
+
 	RoomStatus[ISLAND].returning = false;
 	RoomStatus[ISLAND].item.knife = false;
 	RoomStatus[ISLAND].item.banana = false;
 	RoomStatus[ISLAND].item.treasure = false;
 	RoomStatus[ISLAND].item.keys = false;
 
-    RoomStatus[GANGPLANK].returning = false;
+	RoomStatus[GANGPLANK].returning = false;
 	RoomStatus[GANGPLANK].item.knife = false;
 	RoomStatus[GANGPLANK].item.banana = false;
 	RoomStatus[GANGPLANK].item.treasure = false;
@@ -662,25 +662,25 @@ void initializeStatus(roomType RoomStatus[NOROOM], inventory& inv, puzzle& puz) 
 	RoomStatus[SHIPWHEEL].item.banana = false;
 	RoomStatus[SHIPWHEEL].item.treasure = false;
 	RoomStatus[SHIPWHEEL].item.keys = false;
-	
+
 	RoomStatus[UPPERDECK].returning = false;
 	RoomStatus[UPPERDECK].item.knife = false;
 	RoomStatus[UPPERDECK].item.banana = false;
 	RoomStatus[UPPERDECK].item.treasure = false;
 	RoomStatus[UPPERDECK].item.keys = false;
-	
+
 	RoomStatus[BOTTOMDECK].returning = false;
 	RoomStatus[BOTTOMDECK].item.knife = false;
 	RoomStatus[BOTTOMDECK].item.banana = false;
 	RoomStatus[BOTTOMDECK].item.treasure = false;
 	RoomStatus[BOTTOMDECK].item.keys = false;
-	
+
 	RoomStatus[GALLEY].returning = false;
 	RoomStatus[GALLEY].item.knife = false;
 	RoomStatus[GALLEY].item.banana = false;
 	RoomStatus[GALLEY].item.treasure = false;
 	RoomStatus[GALLEY].item.keys = false;
-	
+
 	RoomStatus[BRIG].returning = false;
 	RoomStatus[BRIG].item.knife = false;
 	RoomStatus[BRIG].item.banana = false;
@@ -715,7 +715,7 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	bool pcheck;
 	command = command + " ";
 	i = 0;
-	while (command != "" and i<=1)
+	while (command != "" and i <= 1)
 	{
 		if (command != "")
 		{
@@ -752,25 +752,25 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	{
 		currentRoom = rooms[currentRoom].direction.down;
 	}
-	
-	if(currentRoom==CAPTAINQUARTERS and !inv.item.knife)
+
+	if (currentRoom == CAPTAINQUARTERS and !inv.item.knife)
 	{
-	    cout<<"(There is a knife on the table.)"<<endl;
-	    if(puz.parrot)
-	    {
-	        cout<<"(There are keys in the secret compartment)"<<endl;
-	    }
+		cout << "(There is a knife on the table.)" << endl;
+		if (puz.parrot)
+		{
+			cout << "(There are keys in the secret compartment)" << endl;
+		}
 	}
-	if(currentRoom==CARGOHOLD and !inv.item.treasure)
+	if (currentRoom == CARGOHOLD and !inv.item.treasure)
 	{
-	    cout<<"(Treasure is in the trunk.)"<<endl;
+		cout << "(Treasure is in the trunk.)" << endl;
 	}
-	
+
 
 	//SHIPWHEEL/Gorrila puzzle
 	if (currentRoom == SHIPWHEEL and !puz.gorilla)
 	{
-	    cout<<"You are near the wheel"<<endl;
+		cout << "You are near the wheel" << endl;
 		if (word[0] == "give" or word[0] == "feed")
 		{
 			if (word[1] == "bananas" or word[1] == "banana" or word[1] == "gorilla")
@@ -806,7 +806,7 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	while (currentRoom == GALLEY and !puz.parrot)
 	{
 		cout << "The parrot does not let you leave" << endl << endl;
-		
+
 		getline(cin, pcommand);
 		i = 0;
 		pcommand = pcommand + " ";
@@ -821,7 +821,7 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 		if (not pcheck)
 		{
 			cout << endl;
-			parrot(pword,i);
+			parrot(pword, i);
 			cout << endl;
 			cout << "There may be certain words that will set you free" << endl << endl;
 		}
@@ -837,7 +837,7 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	//Brig/Prisoner puzzle
 	if (currentRoom == BRIG and !puz.prisoner)
 	{
-		if (word[0] == "unlock" or word[0] == "free" or word[0] == "use" or word[0]=="open")
+		if (word[0] == "unlock" or word[0] == "free" or word[0] == "use" or word[0] == "open")
 		{
 			if (word[1] == "prisoner" or word[1] == "cell" or word[1] == "key" or word[1] == "keys")
 			{
@@ -861,25 +861,25 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 					}
 				}
 				else
-				cout << "The cell remains locked" << endl << endl;
+					cout << "The cell remains locked" << endl << endl;
 			}
 		}
 		else
 		{
-		    if(inv.item.keys)
-		    {
-		        cout<<"You have keys you can use"<<endl;
-		    }
-		    else
-        	{
-        	    if(!inv.item.keys)
-        	    cout<<"You can't do that or you need to be more specific"<<endl;
-        	}
+			if (inv.item.keys)
+			{
+				cout << "You have keys you can use" << endl;
+			}
+			else
+			{
+				if (!inv.item.keys)
+					cout << "You can't do that or you need to be more specific" << endl;
+			}
 		}
 	}
 
 	//Gangplank/Natives puzzle
-	if (currentRoom == ISLAND and !puz.natives and rooms[ISLAND].returning and lastRoom==GANGPLANK)
+	if (currentRoom == ISLAND and !puz.natives and rooms[ISLAND].returning and lastRoom == GANGPLANK)
 	{
 		cout << "The natives have blocked you and will not allow you to leave," << endl;
 		cout << "maybe giving them something from the ship will make them leave." << endl;
@@ -904,29 +904,29 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 					}
 				}
 				else
-            	{
-            	    cout<<"You can't do that or you need to be more specific"<<endl;
-            	}
+				{
+					cout << "You can't do that or you need to be more specific" << endl;
+				}
 			}
 			else
 			{
 				if (word[0] == "give" or word[0] == "offer")//Can make this specific to the item offered***
 				{
-				cout << "The natives do not accept your offering" << endl << endl;
+					cout << "The natives do not accept your offering" << endl << endl;
 				}
 				else
-            	{
-            	    cout<<"You can't do that or you need to be more specific"<<endl;
-            	}
+				{
+					cout << "You can't do that or you need to be more specific" << endl;
+				}
 			}
 		}
 	}
 
 	//ShipWheel/Win puzzle
 	{
-		if (currentRoom == SHIPWHEEL and puz.gorilla==true)
+		if (currentRoom == SHIPWHEEL and puz.gorilla == true)
 		{
-			if (word[0] == "sail" or word[0] == "leave" or word[0]=="use")
+			if (word[0] == "sail" or word[0] == "leave" or word[0] == "use")
 			{
 				if (puz.prisoner)
 				{
@@ -938,15 +938,11 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 					cout << "You may need another person to man the ship" << endl << endl;
 				}
 			}
-			else
-        	{
-        	    cout<<"You can't do that or you need to be more specific"<<endl;
-        	}
 		}
 	}
 
 
-	if (word[0] == "take" or word[0] == "grab" or word[0] == "pickup" or word[0]=="get")    // PICK UP STUFF
+	if (word[0] == "take" or word[0] == "grab" or word[0] == "pickup" or word[0] == "get")    // PICK UP STUFF
 	{
 		if (word[1] == "keys")
 		{
@@ -974,37 +970,37 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 			}
 		}
 		else
-    	{
-    	    cout<<"You can't do that or you need to be more specific"<<endl;
-    	}
+		{
+			cout << "You can't do that or you need to be more specific" << endl;
+		}
 
 
 		if (word[1] == "banana" or word[1] == "bananas")
 		{
-		    if(rooms[currentRoom].item.banana)
-		    {
-		        if (currentRoom !=TREE)
-			    {
-                    inv.item.banana = true;
-                    rooms[currentRoom].item.banana = false;
-                    cout<<"You picked up a banana."<<endl;
-			    }
-                else if(inv.item.knife)
-                {
-			        inv.item.banana = true;
-			        cout<<"You cut down a banana!"<<endl;   
-                }
-                else
+			if (rooms[currentRoom].item.banana)
+			{
+				if (currentRoom != TREE)
+				{
+					inv.item.banana = true;
+					rooms[currentRoom].item.banana = false;
+					cout << "You picked up a banana." << endl;
+				}
+				else if (inv.item.knife)
+				{
+					inv.item.banana = true;
+					cout << "You cut down a banana!" << endl;
+				}
+				else
 					cout << "You'll need a knife to cut these down." << endl;
-		    }
-		    else
+			}
+			else
 				cout << "There are no bananas here buddy." << endl;
-        }
-        else
-	    {
-	        cout<<"You can't do that or you need to be more specific"<<endl;
-	    }
-		
+		}
+		else
+		{
+			cout << "You can't do that or you need to be more specific" << endl;
+		}
+
 
 		if (word[1] == "knife" or word[1] == "blade")
 		{
@@ -1019,9 +1015,9 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 				cout << "There is no knife here!" << endl;
 		}
 		else
-    	{
-    	    cout<<"You can't do that or you need to be more specific"<<endl;
-    	}
+		{
+			cout << "You can't do that or you need to be more specific" << endl;
+		}
 		if (word[1] == "treasure")
 		{
 			if (rooms[currentRoom].item.treasure)
@@ -1032,13 +1028,13 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 			}
 		}
 		else
-        {
-        	   cout<<"You can't do that or you need to be more specific"<<endl;
-        }
+		{
+			cout << "You can't do that or you need to be more specific" << endl;
+		}
 	}
 	else
 	{
-	    cout<<"You can't do that or you need to be more specific"<<endl;
+		cout << "You can't do that or you need to be more specific" << endl;
 	}
 
 	if (word[0] == "eat")
@@ -1053,70 +1049,62 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 				inv.item.banana = false;
 			}
 			else
-			cout<<"You don't have that item."<<endl;
+				cout << "You don't have that item." << endl;
 		}
 		else
-		cout<<"You broke a tooth!"<<endl;
-	}
-	else
-	{
-	    cout<<"You can't do that or you need to be more specific"<<endl;
+			cout << "You broke a tooth!" << endl;
 	}
 
 
 	if (word[0] == "drop" or word[0] == "place")    // DROP STUFF
 	{
-		
-			if (word[1] == "keys")
-			{
-			    if (inv.item.keys)
-		        {
-				    inv.item.keys = false;
-				    rooms[currentRoom].item.keys = true;
-				    cout << "You dropped the keys" << endl;
-			    }
-			    else
-			    cout << "You dont have the keys" << endl;
-			}
-			if (word[1] == "knife")
-			{
-			    if(inv.item.knife)
-			    {
-			        inv.item.knife = false;
-			        rooms[currentRoom].item.knife = true;
-			        cout<<"You placed the knife"<<endl;
-			    }
-			    else
-			    cout<<"You don't have this item!"<<endl;
-		    }
-		    if (word[1] == "treasure")
-		    {
-		        if(inv.item.treasure)
-		        {
-		            inv.item.treasure = false;
-		            rooms[currentRoom].item.treasure == true;
-		            cout<<"You placed down the treasure."<<endl;
-		        }
-		        else
-		        cout<<"You don't have that item"<<endl;
-		    }
-		    if (word[1] == "banana")
-		    {
-		        if(inv.item.banana)
-		        {
-		            inv.item.banana = false;
-		            rooms[currentRoom].item.banana == true;
-		            cout<<"You placed down the banana."<<endl;
-		        }
-		        else
-		        cout<<"You don't have that item"<<endl;
-		    }
-		
 
-	}
-	else
-	{
-	    cout<<"You can't do that or you need to be more specific"<<endl;
+		if (word[1] == "keys")
+		{
+			if (inv.item.keys)
+			{
+				inv.item.keys = false;
+				rooms[currentRoom].item.keys = true;
+				cout << "You dropped the keys" << endl;
+			}
+			else
+				cout << "You dont have the keys" << endl;
+		}
+		if (word[1] == "knife")
+		{
+			if (inv.item.knife)
+			{
+				inv.item.knife = false;
+				rooms[currentRoom].item.knife = true;
+				cout << "You placed the knife" << endl;
+			}
+			else
+				cout << "You don't have this item!" << endl;
+		}
+		if (word[1] == "treasure")
+		{
+			if (inv.item.treasure)
+			{
+				inv.item.treasure = false;
+				rooms[currentRoom].item.treasure == true;
+				cout << "You placed down the treasure." << endl;
+			}
+			else
+				cout << "You don't have that item" << endl;
+		}
+		if (word[1] == "banana")
+		{
+			if (inv.item.banana)
+			{
+				inv.item.banana = false;
+				rooms[currentRoom].item.banana == true;
+				cout << "You placed down the banana." << endl;
+			}
+			else
+				cout << "You don't have that item" << endl;
+		}
+
+
 	}
 	cout << endl;
 
@@ -1132,30 +1120,30 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	if (word[0] == "look")
 	{
 		cout << rooms[currentRoom].longd << endl << endl;
-    	if (rooms[currentRoom].item.banana)
-    	{
-    		cout << "Banana" << endl;
-    	}
-    	if (rooms[currentRoom].item.keys)
-    	{
-    		cout << "Keys" << endl;
-    	}
-    	if (rooms[currentRoom].item.knife)
-    	{
-    		cout << "Knife" << endl;
-    	}
-    	if (rooms[currentRoom].item.treasure)
-    	{
-    		cout << "Treasure" << endl;
-    	}
-    	if(puz.gorilla)
-    	{
-    	    cout<<"You are at the wheel. To your south is the upper deck"<<endl;
-    	}
-    	else
-    	{
-    	    cout<<"The gorilla blocks your path, you are near the wheel"<<endl;
-    	}
+		if (rooms[currentRoom].item.banana)
+		{
+			cout << "Banana" << endl;
+		}
+		if (rooms[currentRoom].item.keys)
+		{
+			cout << "Keys" << endl;
+		}
+		if (rooms[currentRoom].item.knife)
+		{
+			cout << "Knife" << endl;
+		}
+		if (rooms[currentRoom].item.treasure)
+		{
+			cout << "Treasure" << endl;
+		}
+		if (puz.gorilla)
+		{
+			cout << "You are at the wheel. To your south is the upper deck" << endl;
+		}
+		else
+		{
+			cout << "The gorilla blocks your path, you are near the wheel" << endl;
+		}
 	}
 
 	if (word[0] == "inventory")
