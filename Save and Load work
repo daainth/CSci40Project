@@ -13,9 +13,8 @@ Diego Denis-Arrue
 #include <iso646.h>
 #include <string>
 using namespace std;
-bool gameOver = false;
-string Vend = "yay";
-string Cend = "ay";
+const string Vend = "yay";
+const string Cend = "ay";
 
 //Eventually possibly include "Ocean" to rooms
 enum rooms { TREE, ISLAND, GANGPLANK, UPPERDECK, SHIPWHEEL, BOTTOMDECK, GALLEY, BRIG, CAPTAINQUARTERS, CARGOHOLD, LADDER, NOROOM };
@@ -94,6 +93,7 @@ int main()
 	char LoadAnswer;
 	initialize(room);                        // initialize sets everything up from the start of the game
 	currentRoom = ISLAND;
+	bool gameOver = false;
 
 	if (Load.is_open())
 	{
