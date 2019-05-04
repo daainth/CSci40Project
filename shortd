@@ -7,3 +7,42 @@ There is a parrot in the corner. //Galley
 The prisoner is still asking for the keys //Brig
 There is a bed and a table in this room //Captainquarters
 Amongst you are barrels, a pile of tools, and a trunk //Cargohold
+
+CSci 40
+At end of game tell user achievements
+Secret rooms
+Secret tasks - “easter eggs”
+At end tell user what they’ve done”10/15”
+
+Know what you are allowed to type
+Leave ship command
+Back command
+Stab/attack gorilla 
+Gorilla hungry
+Wheel room instead of wheel
+Stab natives - game over 
+Don’t spoil treasure
+Captain quarters
+Need another room between captains quarters and upperdeck
+
+Down trapdoor
+Explain parrot piglatin more specifically
+Take tools
+Examine tools
+Look at barrels
+Left right forward backward
+Send player away from wheel
+Prompt user when they use incorrect command
+
+Fake out natives taking out treasure
+
+
+Found knife change to take knife
+Near wheel not approach wheel
+Fix bananas
+Look shows items in room
+Near ladder on upperdeck
+Tell user keys are in captains quarters now after parrot
+Respond to something if command doesn’t work(open cell)
+Prompt user they they could still use keys if they type wrong command
+When we reenter tell user item is there in description if they dropped
