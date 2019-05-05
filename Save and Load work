@@ -75,6 +75,7 @@ void loadGame(ifstream&, inventory&, rooms&, roomType[], puzzle&);
 
 void saveGame(ofstream&, inventory, rooms, roomType[], puzzle);
 
+string EnumToString (rooms);
 
 //------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -106,10 +107,7 @@ int main()
 			loadGame(Load, inv, currentRoom, room, puz);
 		}
 		else
-		{
 			initializeStatus(room, inv, puz);    //  RESTART
-		}
-
 	}
 	else
 		initializeStatus(room, inv, puz);    // NEW GAME 
@@ -124,7 +122,8 @@ int main()
 	{
 		if (room[currentRoom].returning)
 		{
-			cout << room[currentRoom].shortd << endl << endl;
+			cout << room[currentRoom].shortd << endl << endl;    // Always prints short description
+			
 			if (currentRoom == CAPTAINQUARTERS and !inv.item.knife)
 			{
 				cout << "(There is a knife on the table.)" << endl;
@@ -156,7 +155,7 @@ int main()
 				}
 			}
 		}
-		else
+		else     // player has never been in this room before
 		{
 			cout << room[currentRoom].longd << endl << endl;
 			if (currentRoom == CAPTAINQUARTERS and !inv.item.knife)
@@ -771,7 +770,8 @@ void initializeStatus(roomType RoomStatus[NOROOM], inventory& inv, puzzle& puz) 
 
 
 void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[NOROOM], inventory& inv, puzzle& puz, int& gameCheck)
-{
+{  
+    lastRoom == currentRoom;
 	string word[2], pword[15];
 	int blank, i;
 	string pcommand;
@@ -795,212 +795,30 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 	{
 		currentRoom = rooms[currentRoom].direction.south;
 	}
-	if (word[0] == "east" or word[0] == "e" or word[1] == "east" or word[1] == "e")
+	else if (word[0] == "east" or word[0] == "e" or word[1] == "east" or word[1] == "e")
 	{
 		currentRoom = rooms[currentRoom].direction.east;
 	}
-	if (word[0] == "west" or word[0] == "w" or word[1] == "west" or word[1] == "w")
+	else if (word[0] == "west" or word[0] == "w" or word[1] == "west" or word[1] == "w")
 	{
 		currentRoom = rooms[currentRoom].direction.west;
 	}
-	if (word[0] == "north" or word[0] == "n" or word[1] == "north" or word[1] == "n")
+	else if (word[0] == "north" or word[0] == "n" or word[1] == "north" or word[1] == "n")
 	{
 		currentRoom = rooms[currentRoom].direction.north;
 	}
-	if (word[0] == "up" or word[0] == "u" or word[1] == "up" or word[1] == "u")
+	else if (word[0] == "up" or word[0] == "u" or word[1] == "up" or word[1] == "u")
 	{
 		currentRoom = rooms[currentRoom].direction.up;
 	}
-	if (word[0] == "down" or word[0] == "d" or word[1] == "down" or word[1] == "d")
+	else if (word[0] == "down" or word[0] == "d" or word[1] == "down" or word[1] == "d")
 	{
 		currentRoom = rooms[currentRoom].direction.down;
 	}
-
-	/*if (currentRoom == CAPTAINQUARTERS and !inv.item.knife)
-	{
-		cout << "(There is a knife on the table.)" << endl;
-		if (puz.parrot)
-		{
-			cout << "(There are keys in the secret compartment)" << endl;
-		}
-	}
-	if (currentRoom == CARGOHOLD and !inv.item.treasure)
-	{
-		cout << "(Treasure is in the trunk.)" << endl;
-	}*/
-
-
-	//SHIPWHEEL/Gorrila puzzle
-	if (currentRoom == SHIPWHEEL and !puz.gorilla)
-	{
-		if (word[0] == "give" or word[0] == "feed")
-		{
-			if (word[1] == "bananas" or word[1] == "banana" or word[1] == "gorilla")
-			{
-				if (inv.item.banana)
-				{
-					puz.gorilla = true;
-					inv.item.banana = false;
-					cout << "The gorilla is happy and satisfied. You may now approach the wheel" << endl << endl;
-					currentRoom = SHIPWHEEL;
-				}
-				else
-				{
-					cout << "You do not have bananas to offer" << endl << endl;
-				}
-			}
-			else
-			{
-				cout << "The gorilla throws it back at you" << endl << endl;
-			}
-		}
-		else
-		{
-			cout << "There is a large gorilla by the ship's wheel. This gorilla is hostile. You can't approach the wheel." << endl << endl;
-		}
-	}
-
-	//GALLEY/Parrot puzzle
-	if (currentRoom == GALLEY and !puz.parrot)
-	{
-		cout << rooms[currentRoom].longd << endl << endl;
-	}
-	while (currentRoom == GALLEY and !puz.parrot)
-	{
-		cout << "The parrot does not let you leave" << endl << endl;
-
-		getline(cin, pcommand);
-		i = 0;
-		pcommand = pcommand + " ";
-		while (pcommand != "")
-		{
-			blank = pcommand.find(' ');
-			pword[i] = pcommand.substr(0, blank);
-			pcommand = pcommand.erase(0, blank + 1);
-			i++;
-		}
-		pcheck = pwordcheck(pword);
-		if (not pcheck)
-		{
-			cout << endl;
-			parrot(pword, i);
-			cout << endl;
-			cout << "There may be certain words that will set you free" << endl << endl;
-		}
-		else
-		{
-			puz.parrot = true;
-			cout << "The parrot is happy and lets you leave!" << endl;
-			cout << "It tells you a secret" << endl;
-			cout << "'There is a secret compartment in the captain's quarters which contains the keys for the prisoner's cell'" << endl;
-		}
-	}
-
-	//Brig/Prisoner puzzle
-	if (currentRoom == BRIG and !puz.prisoner)
-	{
-		if (word[0] == "unlock" or word[0] == "free" or word[0] == "use" or word[0] == "open")
-		{
-			if (word[1] == "prisoner" or word[1] == "cell" or word[1] == "key" or word[1] == "keys")
-			{
-				if (inv.item.keys)
-				{
-					cout << "You free the prisoner! He is greatful and will now willingly become your servant" << endl;
-					puz.prisoner = true;
-				}
-				else
-				{
-					cout << "You do not have keys to use" << endl << endl;
-				}
-			}
-			else
-			{
-				if (word[1] == "")
-				{
-					if (inv.item.keys)
-					{
-						cout << "Try using the keys" << endl;
-					}
-				}
-				else
-					cout << "The cell remains locked" << endl << endl;
-			}
-		}
-		else
-		{
-			if (inv.item.keys)
-			{
-				cout << "You have keys you can use" << endl;
-			}
-			else
-			{
-				if (!inv.item.keys)
-					cout << "You can't do that or you need to be more specific" << endl;
-			}
-		}
-	}
-
-	//Gangplank/Natives puzzle
-	if (currentRoom == ISLAND and !puz.natives and rooms[ISLAND].returning and lastRoom == GANGPLANK)
-	{
-		cout << "The natives have blocked you and will not allow you to leave," << endl;
-		cout << "maybe giving them something from the ship will make them leave." << endl;
-		currentRoom = GANGPLANK;
-	}
-	else
-	{
-		if (currentRoom == GANGPLANK and !puz.natives and rooms[GANGPLANK].returning)
-		{
-			if (word[0] == "give" or word[0] == "offer")
-			{
-				if (word[1] == "treasure")
-				{
-					if (inv.item.treasure)
-					{
-						cout << "The natives happily accept the treasure and allow you to roam their island" << endl << endl;
-						puz.natives = true;
-					}
-					else
-					{
-						cout << "The natives do not accept your offering" << endl << endl;
-					}
-				}
-				else
-				{
-					cout << "You can't do that or you need to be more specific" << endl;
-				}
-			}
-			else
-			{
-				if (word[0] == "give" or word[0] == "offer")//Can make this specific to the item offered***
-				{
-					cout << "The natives do not accept your offering" << endl << endl;
-				}
-			}
-		}
-	}
-
-	//ShipWheel/Win puzzle
-	{
-		if (currentRoom == SHIPWHEEL and puz.gorilla == true)
-		{
-			if (word[0] == "sail" or word[0] == "leave" or word[0] == "use")
-			{
-				if (puz.prisoner)
-				{
-					cout << "You sail away from the island and back to civilization!" << endl << endl;
-					gameCheck = 1;
-				}
-				else
-				{
-					cout << "You may need another person to man the ship" << endl << endl;
-				}
-			}
-		}
-	}
-
-
-	if (word[0] == "take" or word[0] == "grab" or word[0] == "pickup" or word[0] == "get")    // PICK UP STUFF
+	
+	
+	
+	else if (word[0] == "take" or word[0] == "grab" or word[0] == "pickup" or word[0] == "get")    // PICK UP STUFF
 	{
 		if (word[1] == "keys" or word[1]=="key")
 		{
@@ -1075,28 +893,24 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 		}
 	}
 
-	if (word[0] == "eat")
+	else if (word[0] == "eat" and word[1]=="banana" or word[0]=="eat" and word[1]=="banana")
 	{
-		if (word[1] == "banana" or word[1]=="bananas")
+		if (inv.item.banana)
 		{
-			if (inv.item.banana)
-			{
-				cout << "chomp chomp chomp" << endl;
-				cout << "..." << endl;
-				cout << "You ate the banana!" << endl;
-				inv.item.banana = false;
-			}
-			else
-				cout << "You don't have that item." << endl;
+			cout << "chomp chomp chomp" << endl;
+			cout << "..." << endl;
+			cout << "You ate the banana!" << endl;
+			inv.item.banana = false;
 		}
 		else
-			cout << "You broke a tooth!" << endl;
+		{
+			cout << "You don't have that item." << endl;
+		}
 	}
 
 
-	if (word[0] == "drop" or word[0] == "place")    // DROP STUFF
+	else if (word[0] == "drop" or word[0] == "place")    // DROP STUFF
 	{
-
 		if (word[1] == "keys" or word[1]=="key")
 		{
 			if (inv.item.keys)
@@ -1141,24 +955,21 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 			else
 				cout << "You don't have that item" << endl;
 		}
-
-
 	}
-	cout << endl;
-
-	if (word[0] == "help")
+	else if (word[0] == "help")
 	{
-		cout << "You can input up to two words to use as actions" << endl;
-		cout << "'go west' or just 'west'- will take you west or 'pickup keys' will pickup the keys" << endl;
-		cout << "You may also type 'look' to recieve a longer description of where you are at" << endl;
-		cout << "Inputting 'inventory' will show you your current items" << endl;
+		cout << "You can input up to two words to use as actions." << endl;
+		cout << "'go west', 'west', or simply 'w' will take you west." << endl;
+		cout << "Commands such as 'pickup', 'take', 'grab', or 'get' will place an item into your inventory."<<endl;
+		cout << "Inputting 'inventory' will show you your current items." << endl;
+		cout << "You may also type 'look' to recieve a longer description of where you are at." << endl;
 		cout << endl << endl;
 	}
 
-	if (word[0] == "look")
+	else if (word[0] == "look")
 	{
 		cout << rooms[currentRoom].longd << endl << endl;
-		cout << "In this room there is :" << endl;
+		cout << "In this room there are the following :" << endl;
 		if (rooms[currentRoom].item.banana)
 		{
 			cout << "Banana" << endl;
@@ -1187,11 +998,229 @@ void execute(string command, rooms& currentRoom, rooms lastRoom, roomType rooms[
 		}
 	}
 
-	if (word[0] == "inventory")
+	else if (word[0] == "inventory")
 	{
 		cout << "You have :" << endl;
 		invent(inv);
 	}
+	
+	else if (word[0] == "back" or word[0] == "return")
+	{
+	    cout<<"You are back at the " ; 
+	    cout<<EnumToString(lastRoom)<<endl;
+	    currentRoom = lastRoom;
+	}
+	
+	else     // END OF ELSE IF STATEMENTS
+	{
+	    cout<< "Invalid command. Type 'help' to see commands."<<endl;
+	}
+
+
+	/*if (currentRoom == CAPTAINQUARTERS and !inv.item.knife)
+	{
+		cout << "(There is a knife on the table.)" << endl;
+		if (puz.parrot)
+		{
+			cout << "(There are keys in the secret compartment)" << endl;
+		}
+	}
+	if (currentRoom == CARGOHOLD and !inv.item.treasure)
+	{
+		cout << "(Treasure is in the trunk.)" << endl;
+	}*/
+
+
+	//SHIPWHEEL/Gorrila puzzle
+	if (currentRoom == SHIPWHEEL and !puz.gorilla)     // If gorilla puzzle has not been completed
+	{
+		if (word[0] == "give" or word[0] == "feed")
+		{
+			if (word[1] == "bananas" or word[1] == "banana" or word[1] == "gorilla")
+			{
+				if (inv.item.banana)
+				{
+					puz.gorilla = true;
+					inv.item.banana = false;
+					cout << "The gorilla is happy and satisfied. You may now approach the wheel" << endl << endl;
+					currentRoom = SHIPWHEEL;
+				}
+				else
+				{
+					cout << "You do not have bananas to offer" << endl << endl;
+				}
+			}
+			else
+			{
+				cout << "The gorilla throws it back at you" << endl << endl;
+			}
+		}
+		else
+		{
+			cout << "There is a large gorilla by the ship's wheel. This gorilla is hostile. You can't approach the wheel." << endl << endl;
+		}
+	}
+
+	//GALLEY/Parrot puzzle
+	if (currentRoom == GALLEY and !puz.parrot)   // If parrot puzzle not completed
+	{
+		cout << rooms[currentRoom].longd << endl << endl;
+	}
+	while (currentRoom == GALLEY and !puz.parrot)
+	{
+		cout << "The parrot does not let you leave" << endl << endl;
+
+		getline(cin, pcommand);
+		i = 0;
+		pcommand = pcommand + " ";
+		while (pcommand != "")
+		{
+			blank = pcommand.find(' ');
+			pword[i] = pcommand.substr(0, blank);
+			pcommand = pcommand.erase(0, blank + 1);
+			i++;
+		}
+		pcheck = pwordcheck(pword);
+		if (not pcheck)
+		{
+			cout << endl;
+			parrot(pword, i);
+			cout << endl;
+			cout << "There may be certain words that will set you free" << endl << endl;
+		}
+		else
+		{
+			puz.parrot = true;
+			cout << "The parrot is happy and lets you leave!" << endl;
+			cout << "It tells you a secret" << endl;
+			cout << "'There is a secret compartment in the captain's quarters which contains the keys for the prisoner's cell'" << endl;
+		}
+	}
+
+	//Brig/Prisoner puzzle
+	if (currentRoom == BRIG and !puz.prisoner)  // If prisoner puzzle not completed
+	{
+		if (word[0] == "unlock" or word[0] == "free" or word[0] == "use" or word[0] == "open")
+		{
+			if (word[1] == "prisoner" or word[1] == "cell" or word[1] == "key" or word[1] == "keys")
+			{
+				if (inv.item.keys)
+				{
+					cout << "You free the prisoner! He is greatful and will now willingly become your servant" << endl;
+					puz.prisoner = true;
+				}
+				else
+				{
+					cout << "You do not have keys to use" << endl << endl;
+				}
+			}
+			else
+			{
+				if (word[1] == "")
+				{
+					if (inv.item.keys)
+					{
+						cout << "Try using the keys" << endl;
+					}
+				}
+				else
+					cout << "The cell remains locked" << endl << endl;
+			}
+		}
+		else
+		{
+			if (inv.item.keys)
+			{
+				cout << "You have keys you can use" << endl;
+			}
+			else
+			{
+				if (!inv.item.keys)
+					cout << "You can't do that or you need to be more specific" << endl;
+			}
+		}
+	}
+
+	//Gangplank/Natives puzzle
+	if (currentRoom == ISLAND and !puz.natives and rooms[ISLAND].returning and lastRoom == GANGPLANK)
+	{
+		cout << "The natives have blocked you and will not allow you to leave," << endl;
+		cout << "maybe giving them something from the ship will make them leave." << endl;
+		currentRoom = GANGPLANK;
+	}
+	else
+	{
+		if (currentRoom == GANGPLANK and !puz.natives and rooms[GANGPLANK].returning)
+		{
+			if (word[0] == "give" or word[0] == "offer")
+			{
+				if (word[1] == "treasure" or word[1] == "gold")
+				{
+					if (inv.item.treasure)
+					{
+						cout << "The natives happily accept the treasure and allow you to roam their island" << endl << endl;
+						puz.natives = true;
+						inv.item.treasure = false;
+					}
+					else
+					{
+						cout << "You do not have the treasure!" << endl << endl;
+					}
+				}
+				else
+				{
+					cout << "You can't do that or you need to be more specific" << endl;
+				}
+			}
+			else
+			{
+				cout << "The natives do not accept your offering" << endl << endl;
+			}
+		}
+	}
+
+	//ShipWheel/Win puzzle
+	{
+		if (currentRoom == SHIPWHEEL and puz.gorilla == true)
+		{
+			if (word[0] == "sail" or word[0] == "leave" or word[0] == "use")
+			{
+				if (puz.prisoner)
+				{
+					cout << "You sail away from the island and back to civilization!" << endl << endl;
+					gameCheck = 1;
+				}
+				else
+				{
+					cout << "You may need another person to man the ship" << endl << endl;
+				}
+			}
+		}
+	}
+
+	cout << endl;
+
+	
 
 	rooms[lastRoom].returning = true;
+}
+
+
+
+string EnumToString(rooms RoomFind)   // Converts enumerated rooms back into strings for use in outputs
+{
+    switch (RoomFind)
+    {
+        case 1: return "tree";
+        case 2: return "island";
+        case 3: return "gangplank";
+        case 4: return "upperdeck";
+        case 5: return "shipwheel";
+        case 6: return "bottomdeck";
+        case 7: return "galley";
+        case 8: return "captain's quarters";
+        case 9: return "cargohold";
+        case 10:   return "ladder";
+    }
+ 
 }
