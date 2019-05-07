@@ -55,7 +55,7 @@ struct inventory {
 
 void initialize(roomType[]);    // Has to be roomtype[NOROOM] for some reason
 
-void execute(string, rooms&, rooms&, roomType[], inventory&, puzzle&, int&); // rooms has an & next to it because we need the function to return the current room
+void execute(string&, rooms&, rooms&, roomType[], inventory&, puzzle&, int&); // rooms has an & next to it because we need the function to return the current room
 
 void parrot(string[], int);//PigLatin
 
@@ -79,6 +79,10 @@ string EnumToString(rooms);
 
 void itemDisplay(puzzle, rooms, roomType[]);
 
+int puzcounter(puzzle);
+
+int roomcounter(roomType[]);
+
 //------------------------------------------------------------------------------------------------------------------------------------------
 
 int main()
@@ -87,7 +91,7 @@ int main()
 	ifstream Load("SaveFile.txt");
 	inventory inv;
 	puzzle puz;
-	int gameCheck;
+	int gameCheck, turncount, score, puzzlescore, roomscore, turnscore;
 	gameCheck = 0;
 	string command;
 	string start;
@@ -98,6 +102,9 @@ int main()
 	initialize(room);                        // initialize sets everything up from the start of the game
 	currentRoom = ISLAND;
 	bool gameOver = false;
+	int tell;
+	tell = 0;
+	turncount = 0;
 
 	if (Load.is_open())
 	{
@@ -127,25 +134,6 @@ int main()
 			cout << room[currentRoom].shortd << endl << endl;    // Always prints short description
 			itemDisplay(puz, currentRoom, room);
 
-			/*if (currentRoom == CAPTAINQUARTERS and room[currentRoom].item.knife)
-			{
-				cout << "(There is a knife on the table.)" << endl;
-				if (puz.parrot)
-				{
-					cout << "(There are keys in the secret compartment)" << endl;
-				}
-			}
-			if (currentRoom == CAPTAINQUARTERS)
-			{
-				if (puz.parrot)
-				{
-					cout << "(There are keys in the secret compartment)" << endl;
-				}
-			}
-			if (currentRoom == CARGOHOLD and !inv.item.treasure)
-			{
-				cout << "(Treasure is in the trunk.)" << endl;
-			}*/
 			if (currentRoom == SHIPWHEEL and !puz.gorilla)
 			{
 				cout << "You are near the ship's wheel" << endl;
@@ -162,18 +150,7 @@ int main()
 		{
 			cout << room[currentRoom].longd << endl << endl;
 			itemDisplay(puz, currentRoom, room);
-			/*if (currentRoom == CAPTAINQUARTERS and !inv.item.knife)
-			{
-				cout << "(There is a knife on the table.)" << endl;
-				if (puz.parrot and room[currentRoom].item.keys)
-				{
-					cout << "(There are keys in the secret compartment)" << endl;
-				}
-			}
-			if (currentRoom == CARGOHOLD and !inv.item.treasure)
-			{
-				cout << "(Treasure is in the trunk.)" << endl;
-			}*/
+			
 			if (currentRoom == SHIPWHEEL and !puz.gorilla)
 			{
 				cout << "You are near the wheel" << endl;
@@ -186,9 +163,10 @@ int main()
 				}
 			}
 		}
-
+		lastRoom = currentRoom;
 
 		getline(cin, command);
+		tell++;
 
 
 
@@ -211,26 +189,86 @@ int main()
 		{
 			command = "quit";
 		}
-		lastRoom = currentRoom;
+		//lastRoom = currentRoom;
+		//cout << "Last room " << lastRoom << endl;
 		gameOver = command == "quit";
 
 	}
+	score = 0;
+	turnscore = tell * 1000;
+	puzzlescore = (puzcounter(puz)) * 50000;
+	roomscore = (roomcounter(room)) * 10000;
+	score = score - puzzlescore - roomscore - turnscore;
+
 	if (gameCheck == 1)
 	{
+		cout << "---------------------------------" << endl;
 		cout << "You won! Congratulations" << endl;
+		cout << "---------------------------------" << endl;
+		cout << "Puzzles completed : " << puzcounter(puz) << " out of 5 puzzles completed" << endl;
+		cout << "Areas found : " << roomcounter(room)-1 << " out of 11 areas found" << endl;
+		cout << "Turns taken : " << tell << endl;
+		cout << "Score : " << score << endl;
 	}
 	else
 	{
+		cout << "---------------------------------" << endl;
 		cout << "GAME OVER" << endl;
+		cout << "---------------------------------" << endl;
+		cout << "Puzzles completed : " << puzcounter(puz) << " out of 5 puzzles completed" << endl;
+		cout << "Areas found : " << roomcounter(room)-1 << " out of 11 areas found" << endl;
+		cout << "Turns taken : " << tell-1 << endl;
+		cout << "Score : " << score << endl;
 	}
 	return 0;
 }
 
+int puzcounter(puzzle puz)
+{
+	int count;
+	count = 0;
+	if (puz.gorilla)
+	{
+		count++;
+	}
+	if (puz.knife)
+	{
+		count++;
+	}
+	if (puz.natives)
+	{
+		count++;
+	}
+	if (puz.parrot)
+	{
+		count++;
+	}
+	if (puz.prisoner)
+	{
+		count++;
+	}
+
+	return count;
+}
+
+int roomcounter(roomType rooms[NOROOM])
+{
+	int i, count;
+	count = 0;
+	for (i = 0; i <= NOROOM - 1; i++)
+	{
+		if (rooms[i].returning)
+		{
+			count++;
+		}
+	}
+	return count;
+}
 
 void loadGame(ifstream& load, inventory& inv, rooms& current, roomType rooms[NOROOM], puzzle& puz)
 {
 
-	char line[65];
+	char line[200];
 	int place = 0;
 	int i = 0;
 	while (!load.eof())
@@ -330,6 +368,7 @@ void loadGame(ifstream& load, inventory& inv, rooms& current, roomType rooms[NOR
 	case '7': current = BRIG; break;
 	case '8': current = CAPTAINQUARTERS; break;
 	case '9': current = CARGOHOLD; break;
+	case '10':current = LADDER; break;
 	default: current = ISLAND;
 	}
 
@@ -836,13 +875,14 @@ void initializeStatus(roomType RoomStatus[NOROOM], inventory& inv, puzzle& puz) 
 
 
 
-void execute(string command, rooms& currentRoom, rooms& lastRoom, roomType rooms[NOROOM], inventory& inv, puzzle& puz, int& gameCheck)
+void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType rooms[NOROOM], inventory& inv, puzzle& puz, int& gameCheck)
 {
-	lastRoom = currentRoom;
+	//lastRoom = currentRoom;
 	string word[2], pword[15];
 	int blank, i;
 	string pcommand;
 	bool pcheck;
+
 	command = command + " ";
 	i = 0;
 	while (command != "" and i <= 1)
@@ -928,6 +968,7 @@ void execute(string command, rooms& currentRoom, rooms& lastRoom, roomType rooms
 				{
 					inv.item.banana = true;
 					cout << "You cut down a banana!" << endl;
+					puz.knife = true;
 				}
 				else
 					cout << "You'll need a knife to cut these down." << endl;
@@ -986,6 +1027,8 @@ void execute(string command, rooms& currentRoom, rooms& lastRoom, roomType rooms
 			if (currentRoom == TREE and inv.item.knife)
 			{
 				cout << "You cut down a banana!" << endl;
+				inv.item.banana = true;
+				puz.knife = true;
 			}
 		}
 		else if (word[1] == "wheel")
@@ -1068,6 +1111,7 @@ void execute(string command, rooms& currentRoom, rooms& lastRoom, roomType rooms
 		cout << "Inputting 'inventory' will show you your current items." << endl;
 		cout << "You can type 'look' to recieve a longer description of where you are at." << endl;
 		cout << "Typing 'commands' will show most basic commands" << endl;
+		cout << "Typing 'save' will save your progress" << endl;
 		cout << endl << endl;
 	}
 	else if (word[0] == "commands")
@@ -1082,7 +1126,7 @@ void execute(string command, rooms& currentRoom, rooms& lastRoom, roomType rooms
 
 		cout << " - = - = Actions = - = -" << endl;
 		cout << "Getting items || 'take -' 'get -'" << endl;
-		cout << "Interactions || 'use-' 'drop-' " << endl;
+		cout << "Interactions || 'use-' 'drop-' 'eat-'" << endl;
 		cout << "Information || 'look' 'inventory' 'help'" << endl << endl;
 
 		cout << " - = - = Game = - = -" << endl;
@@ -1141,14 +1185,14 @@ void execute(string command, rooms& currentRoom, rooms& lastRoom, roomType rooms
 
 	else if (word[0] == "back" or word[0] == "return")
 	{
-		cout << "You are back at the ";
-		cout << EnumToString(lastRoom) << endl;
 		currentRoom = lastRoom;
+		//cout << "You are back at the ";
+		//cout << EnumToString(lastRoom) << endl;
 	}
 
 	else if (word[0] == "quit")
 	{
-
+		command = "quit";
 	}
 
 	else if (word[0] == "give" or word[0] == "feed" or word[0] == "unlock" or word[0] == "free" or word[0] == "use" or word[0] == "open"
@@ -1164,20 +1208,14 @@ void execute(string command, rooms& currentRoom, rooms& lastRoom, roomType rooms
 		cout << "Invalid command. Type 'commands' to see commands." << endl;
 	}
 
-
-	/*if (currentRoom == CAPTAINQUARTERS and !inv.item.knife)
+	if (currentRoom == GCAVE)
 	{
-	cout << "(There is a knife on the table.)" << endl;
-	if (puz.parrot)
-	{
-	cout << "(There are keys in the secret compartment)" << endl;
+		puz.gorilla = true;
+		puz.knife = true;
+		puz.natives = true;
+		puz.parrot = true;
+		puz.prisoner = true;
 	}
-	}
-	if (currentRoom == CARGOHOLD and !inv.item.treasure)
-	{
-	cout << "(Treasure is in the trunk.)" << endl;
-	}*/
-
 
 	//SHIPWHEEL/Gorrila puzzle
 	if (currentRoom == SHIPWHEEL and !puz.gorilla)     // If gorilla puzzle has not been completed
@@ -1214,6 +1252,7 @@ void execute(string command, rooms& currentRoom, rooms& lastRoom, roomType rooms
 				cout << "You attempt to stab the gorilla..." << endl;
 				cout << "The gorilla ravages your body" << endl;
 				cout << "You are dead" << endl;
+				command = "quit";
 			}
 			else
 			{
