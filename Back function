@@ -69,7 +69,7 @@ bool pwordcheck(string[]);
 
 void invent(inventory);
 
-void initializeStatus(roomType[], inventory&, puzzle&);
+void initializeStatus(roomType[], rooms&, inventory&, puzzle&);
 
 void loadGame(ifstream&, inventory&, rooms&, roomType[], puzzle&);
 
@@ -77,6 +77,7 @@ void saveGame(ofstream&, inventory, rooms, roomType[], puzzle);
 
 void itemDisplay(puzzle, rooms, roomType[]);
 
+char EnumToChar (rooms); // Function to convert enumerated room values into character to use for switch 
 //------------------------------------------------------------------------------------------------------------------------------------------
 
 int main()
@@ -108,10 +109,10 @@ int main()
 			loadGame(Load, inv, currentRoom, room, puz);
 		}
 		else
-			initializeStatus(room, inv, puz);    //  RESTART
+			initializeStatus(room, currentRoom, inv, puz);    //  RESTART
 	}
 	else
-		initializeStatus(room, inv, puz);    // NEW GAME 
+		initializeStatus(room, currentRoom, inv, puz);    // NEW GAME 
 
 
 
@@ -318,16 +319,18 @@ void loadGame(ifstream& load, inventory& inv, rooms& current, roomType rooms[NOR
 	place++;
 	switch (line[place])     // SETS CURRENT ROOM
 	{
-	case '0': current = TREE; break;
-	case '1': current = ISLAND; break;
-	case '2': current = GANGPLANK; break;
-	case '3': current = UPPERDECK; break;
-	case '4': current = SHIPWHEEL; break;
-	case '5': current = BOTTOMDECK; break;
-	case '6': current = GALLEY; break;
-	case '7': current = BRIG; break;
-	case '8': current = CAPTAINQUARTERS; break;
-	case '9': current = CARGOHOLD; break;
+	case 'a': current = TREE; break;
+	case 'b': current = ISLAND; break;
+	case 'c': current = GANGPLANK; break;
+	case 'd': current = UPPERDECK; break;
+	case 'e': current = SHIPWHEEL; break;
+	case 'f': current = BOTTOMDECK; break;
+	case 'g': current = GALLEY; break;
+	case 'h': current = BRIG; break;
+	case 'i': current = CAPTAINQUARTERS; break;
+	case 'j': current = CARGOHOLD; break;
+	case 'k': current = LADDER; break; 
+	case 'l': current = GCAVE; break;
 	default: current = ISLAND;
 	}
 
@@ -436,7 +439,7 @@ void saveGame(ofstream& Save, inventory inv, rooms current, roomType rooms[NOROO
 		Save << "FALSE parrot" << endl;
 	}
 
-	Save << current << endl;  // This keeps track of the current location of the player. It will print a number 
+	Save << EnumToChar(current) << endl;  // This keeps track of the current location of the player. It will print a number 
 
 	cout << endl;
 	cout << "...Saving..." << endl;
@@ -731,7 +734,7 @@ void itemDisplay(puzzle puz, rooms currentRoom,roomType rooms[NOROOM])
 
 
 
-void initializeStatus(roomType RoomStatus[NOROOM], inventory& inv, puzzle& puz)   // This function only occurs if there is no save game. So basically this is the start of the game.
+void initializeStatus(roomType RoomStatus[NOROOM],rooms& current, inventory& inv, puzzle& puz)   // This function only occurs if there is no save game. So basically this is the start of the game.
 {
 	cout << "---------------------------------------------------------" << endl;
 	cout << endl << endl;
@@ -742,7 +745,9 @@ void initializeStatus(roomType RoomStatus[NOROOM], inventory& inv, puzzle& puz) 
 	cout << "Type 'help' at any time to view instructions" << endl << endl;
 	cout << "Good luck and have fun!" << endl;
 	cout << endl;
-
+    
+    current = ISLAND;
+    
 	puz.knife = false;
 	puz.gorilla = false;
 	puz.natives = false;
@@ -1163,7 +1168,7 @@ void execute(string command, rooms& currentRoom, rooms& lastRoom, roomType rooms
 		invent(inv);
 	}
 
-	else if (word[0] == "back" or word[0] == "return")
+	else if (word[0] == "back" or word[0] == "return")   // Sets currentRoom to lastRoom to go back
 	{
 		currentRoom = lastRoom;
 	}
@@ -1171,6 +1176,20 @@ void execute(string command, rooms& currentRoom, rooms& lastRoom, roomType rooms
 	else if (word[0] == "quit")
 	{
 
+	}
+	else if(word[0] == "restart")      // Restarts the game.
+	{
+	    cout << "Are you sure you'd like to restart?" << endl;
+		char RestartAnswer = cin.get();
+		cin.ignore(999, '\n');
+		if (tolower(RestartAnswer) == 'y' or tolower(RestartAnswer) == 'r')
+		{
+			initializeStatus(rooms, currentRoom, inv, puz);    //  RESTART
+		}
+		else
+		{
+		    
+		}
 	}
 
 	else if (word[0] == "give" or word[0] == "feed" or word[0] == "unlock" or word[0] == "free" or word[0] == "use" or word[0] == "open"
@@ -1388,4 +1407,25 @@ void execute(string command, rooms& currentRoom, rooms& lastRoom, roomType rooms
 	rooms[lastRoom].returning = true;
 
 
+}
+char EnumToChar(rooms RoomFind)   // Converts enumerated rooms back into strings for use in outputs
+{
+    switch (RoomFind)
+    {
+        
+        case 0: return 'a';
+        case 1: return 'b'; 
+        case 2: return 'c';
+        case 3: return 'd';
+        case 4: return 'e';
+        case 5: return 'f';
+        case 6: return 'g';
+        case 7: return 'h';
+        case 8: return 'i';
+        case 9:   return 'j';
+        case 10: return 'k';
+        case 11: return 'l';
+        case 12: return 'm';
+    }
+ 
 }
