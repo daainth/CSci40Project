@@ -117,7 +117,7 @@ int main()
 			loadGame(Load, inv, currentRoom, room, puz);
 		}
 		else
-			initializeStatus(room,currentRoom, inv, puz);    //  RESTART
+			initializeStatus(room, currentRoom, inv, puz);    //  RESTART
 	}
 	else
 		initializeStatus(room, currentRoom, inv, puz);    // NEW GAME 
@@ -150,7 +150,7 @@ int main()
 		{
 			cout << room[currentRoom].longd << endl << endl;
 			itemDisplay(puz, currentRoom, room);
-			
+
 			if (currentRoom == SHIPWHEEL and !puz.gorilla)
 			{
 				cout << "You are near the wheel" << endl;
@@ -163,15 +163,15 @@ int main()
 				}
 			}
 		}
-		
+
 
 
 		getline(cin, command);
 		tell++;
 
 
-		execute(command, currentRoom, lastRoom, room, inv, puz, gameCheck, Save); 
-	    // First send command. Then currentRoom. Then lastRoom. Then send room information. Then send player inventory. Then puzzle status. Lastly Save file. 
+		execute(command, currentRoom, lastRoom, room, inv, puz, gameCheck, Save);
+		// First send command. Then currentRoom. Then lastRoom. Then send room information. Then send player inventory. Then puzzle status. Lastly Save file. 
 
 
 
@@ -190,9 +190,11 @@ int main()
 
 	}
 	score = 0;
-	turnscore = tell * 1000;
-	puzzlescore = (puzcounter(puz)) * 50000;
-	roomscore = (roomcounter(room)) * 10000;
+	//31 11 5
+	//660 230 110
+	turnsperfcore = tell * 1000;
+	puzzleperfscore = (puzcounter(puz)) * 50000;
+	roomperfscore = (roomcounter(room)) * 10000;
 	score = score - puzzlescore - roomscore - turnscore;
 
 	if (gameCheck == 1)
@@ -201,7 +203,7 @@ int main()
 		cout << "You won! Congratulations" << endl;
 		cout << "---------------------------------" << endl;
 		cout << "Puzzles completed : " << puzcounter(puz) << " out of 5 puzzles completed" << endl;
-		cout << "Areas found : " << roomcounter(room)-1 << " out of 11 areas found" << endl;
+		cout << "Areas found : " << roomcounter(room) - 1 << " out of 11 areas found" << endl;
 		cout << "Turns taken : " << tell << endl;
 		cout << "Score : " << score << endl;
 	}
@@ -211,9 +213,16 @@ int main()
 		cout << "GAME OVER" << endl;
 		cout << "---------------------------------" << endl;
 		cout << "Puzzles completed : " << puzcounter(puz) << " out of 5 puzzles completed" << endl;
-		cout << "Areas found : " << roomcounter(room)-1 << " out of 11 areas found" << endl;
-		cout << "Turns taken : " << tell-1 << endl;
-		cout << "Score : " << score << endl;
+		cout << "Areas found : " << roomcounter(room) - 1 << " out of 11 areas found" << endl;
+		cout << "Turns taken : " << tell - 1 << endl;
+		if (score < 0)
+		{
+			cout << "Score : 0" << endl;
+		}
+		else
+		{
+			cout << "Score : " << score << endl;
+		}
 	}
 	return 0;
 }
@@ -353,19 +362,19 @@ void loadGame(ifstream& load, inventory& inv, rooms& current, roomType rooms[NOR
 	place++;
 	switch (line[place])     // SETS CURRENT ROOM
 	{
-    	case 'a': current = TREE; break;
-    	case 'b': current = ISLAND; break;
-    	case 'c': current = GANGPLANK; break;
-    	case 'd': current = UPPERDECK; break;
-    	case 'e': current = SHIPWHEEL; break;
-    	case 'f': current = BOTTOMDECK; break;
-    	case 'g': current = GALLEY; break;
-    	case 'h': current = BRIG; break;
-    	case 'i': current = CAPTAINQUARTERS; break;
-    	case 'j': current = CARGOHOLD; break;
-    	case 'k': current = LADDER; break; 
-    	case 'l': current = GCAVE; break;
-    	default: current = ISLAND;
+	case 'a': current = TREE; break;
+	case 'b': current = ISLAND; break;
+	case 'c': current = GANGPLANK; break;
+	case 'd': current = UPPERDECK; break;
+	case 'e': current = SHIPWHEEL; break;
+	case 'f': current = BOTTOMDECK; break;
+	case 'g': current = GALLEY; break;
+	case 'h': current = BRIG; break;
+	case 'i': current = CAPTAINQUARTERS; break;
+	case 'j': current = CARGOHOLD; break;
+	case 'k': current = LADDER; break;
+	case 'l': current = GCAVE; break;
+	default: current = ISLAND;
 	}
 
 }
@@ -728,7 +737,7 @@ bool pwordcheck(string pword[])
 	return check;
 }
 
-void itemDisplay(puzzle puz, rooms currentRoom,roomType rooms[NOROOM])
+void itemDisplay(puzzle puz, rooms currentRoom, roomType rooms[NOROOM])
 {
 	if (rooms[currentRoom].item.banana and currentRoom != TREE)
 	{
@@ -779,8 +788,8 @@ void initializeStatus(roomType RoomStatus[NOROOM], rooms& current, inventory& in
 	cout << "Type 'help' at any time to view instructions" << endl << endl;
 	cout << "Good luck and have fun!" << endl;
 	cout << endl;
-    
-    current = ISLAND;
+
+	current = ISLAND;
 
 	puz.knife = false;
 	puz.gorilla = false;
@@ -873,7 +882,7 @@ void initializeStatus(roomType RoomStatus[NOROOM], rooms& current, inventory& in
 
 
 
-void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType rooms[NOROOM], inventory& inv, puzzle& puz, int& gameCheck,ofstream& Save)
+void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType rooms[NOROOM], inventory& inv, puzzle& puz, int& gameCheck, ofstream& Save)
 {
 
 	string word[2], pword[15];
@@ -898,32 +907,32 @@ void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType room
 
 	if (word[0] == "south" or word[0] == "s" or word[1] == "south" or word[1] == "s")
 	{
-	    lastRoom = currentRoom;
+		lastRoom = currentRoom;
 		currentRoom = rooms[currentRoom].direction.south;
 	}
 	else if (word[0] == "east" or word[0] == "e" or word[1] == "east" or word[1] == "e")
 	{
-	    lastRoom = currentRoom;
+		lastRoom = currentRoom;
 		currentRoom = rooms[currentRoom].direction.east;
 	}
 	else if (word[0] == "west" or word[0] == "w" or word[1] == "west" or word[1] == "w")
 	{
-	    lastRoom = currentRoom;
+		lastRoom = currentRoom;
 		currentRoom = rooms[currentRoom].direction.west;
 	}
 	else if (word[0] == "north" or word[0] == "n" or word[1] == "north" or word[1] == "n")
 	{
-	    lastRoom = currentRoom;
+		lastRoom = currentRoom;
 		currentRoom = rooms[currentRoom].direction.north;
 	}
 	else if (word[0] == "up" or word[0] == "u" or word[1] == "up" or word[1] == "u")
 	{
-	    lastRoom = currentRoom;
+		lastRoom = currentRoom;
 		currentRoom = rooms[currentRoom].direction.up;
 	}
 	else if (word[0] == "down" or word[0] == "d" or word[1] == "down" or word[1] == "d")
 	{
-	    lastRoom = currentRoom;
+		lastRoom = currentRoom;
 		currentRoom = rooms[currentRoom].direction.down;
 	}
 
@@ -934,7 +943,7 @@ void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType room
 		{
 			if (rooms[currentRoom].item.keys)
 			{
-				if (puz.parrot or currentRoom==GCAVE)
+				if (puz.parrot or currentRoom == GCAVE)
 				{
 					if (rooms[currentRoom].item.keys)
 					{
@@ -972,12 +981,12 @@ void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType room
 					inv.item.banana = true;
 					cout << "You cut down a banana!" << endl;
 					puz.knife = true;
-					cout <<" /`-.__                                 /\\"<<endl;
-					cout <<" `. .  ~~--..__                   __..-' ,'"<<endl;
-					cout <<"   `.`-.._     ~~---...___...---~~  _,~,/"<<endl;
-					cout <<"     `-._ ~--..__             __..-~ _-~"<<endl;
-					cout <<"         ~~-..__ ~~--.....--~~   _.-~"<<endl;
-					cout <<"                ~~--...___...--~~"<<endl;
+					cout << " /`-.__                                 /\\" << endl;
+					cout << " `. .  ~~--..__                   __..-' ,'" << endl;
+					cout << "   `.`-.._     ~~---...___...---~~  _,~,/" << endl;
+					cout << "     `-._ ~--..__             __..-~ _-~" << endl;
+					cout << "         ~~-..__ ~~--.....--~~   _.-~" << endl;
+					cout << "                ~~--...___...--~~" << endl;
 					cout << endl;
 				}
 				else
@@ -995,18 +1004,18 @@ void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType room
 				rooms[currentRoom].item.knife = false;
 				inv.item.knife = true;
 				cout << "You picked up a knife!" << endl;
-				cout<<endl;
-                cout<<"                                  _____________________________"<<endl;
-                cout<<"                           _.-''``------------------------|`. |``''--..__"<<endl;
-                cout<<"                      _.-'` ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' | : |          ``'';';--..__"<<endl;
-                cout<<"                 _.-'`                                    | : |         '   :';       ```';"<<endl;
-			    cout<<"            _.-'`                           ________/\_/\_|.'_|_       '   :';           /"<<endl;
-			    cout<<"       _.-'`                         _.-''``                    ``''--:.__;';           _|"<<endl;
-			    cout<<"     .'`                        _.-'`                                     `'`''-._     /"<<endl;
-			    cout<<"   .`                       _.-'                                                  `'-./"<<endl;
-			    cout<<" .'                    _.-'`"<<endl;
-			    cout<<"/               __..-'`"<<endl;
-			    cout<<"``'''----'''````"<<endl;
+				cout << endl;
+				cout << "                                  _____________________________" << endl;
+				cout << "                           _.-''``------------------------|`. |``''--..__" << endl;
+				cout << "                      _.-'` ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' | : |          ``'';';--..__" << endl;
+				cout << "                 _.-'`                                    | : |         '   :';       ```';" << endl;
+				cout << "            _.-'`                           ________/\_/\_|.'_|_       '   :';           /" << endl;
+				cout << "       _.-'`                         _.-''``                    ``''--:.__;';           _|" << endl;
+				cout << "     .'`                        _.-'`                                     `'`''-._     /" << endl;
+				cout << "   .`                       _.-'                                                  `'-./" << endl;
+				cout << " .'                    _.-'`" << endl;
+				cout << "/               __..-'`" << endl;
+				cout << "``'''----'''````" << endl;
 			}
 			else
 				cout << "There is no knife here!" << endl;
@@ -1213,10 +1222,10 @@ void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType room
 	{
 		command = "quit";
 	}
-	
+
 	else if (word[0] == "restart")
 	{
-	    cout << "Are you sure you'd like to restart?" << endl;
+		cout << "Are you sure you'd like to restart?" << endl;
 		char RestartAnswer = cin.get();
 		cin.ignore(999, '\n');
 		if (tolower(RestartAnswer) == 'y' or tolower(RestartAnswer) == 'r')
@@ -1271,7 +1280,7 @@ void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType room
 					cout << "You do not have bananas to offer" << endl;
 				}
 			}
-			else if(word[1]=="treasure" or word[1]=="keys" or word[1]=="knife")
+			else if (word[1] == "treasure" or word[1] == "keys" or word[1] == "knife")
 			{
 				cout << "The gorilla throws it back at you" << endl;
 			}
@@ -1402,7 +1411,7 @@ void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType room
 			}
 			else
 				if (word[0] == "west" or word[0] == "w" or word[0] == "go"
-					or word[0]=="look" or word[0] == "drop" or word[0] == "inventory" or word[0] == "help"
+					or word[0] == "look" or word[0] == "drop" or word[0] == "inventory" or word[0] == "help"
 					or word[0] == "commands" or word[0] == "back")
 				{
 
@@ -1444,22 +1453,22 @@ void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType room
 
 char EnumToChar(rooms RoomFind)   // Converts enumerated rooms back into strings for use in outputs
 {
-    switch (RoomFind)
-    {
-        
-        case 0: return 'a';
-        case 1: return 'b'; 
-        case 2: return 'c';
-        case 3: return 'd';
-        case 4: return 'e';
-        case 5: return 'f';
-        case 6: return 'g';
-        case 7: return 'h';
-        case 8: return 'i';
-        case 9:   return 'j';
-        case 10: return 'k';
-        case 11: return 'l';
-        case 12: return 'm';
-    }
- 
+	switch (RoomFind)
+	{
+
+	case 0: return 'a';
+	case 1: return 'b';
+	case 2: return 'c';
+	case 3: return 'd';
+	case 4: return 'e';
+	case 5: return 'f';
+	case 6: return 'g';
+	case 7: return 'h';
+	case 8: return 'i';
+	case 9:   return 'j';
+	case 10: return 'k';
+	case 11: return 'l';
+	case 12: return 'm';
+	}
+
 }
