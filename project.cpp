@@ -55,7 +55,7 @@ struct inventory {
 
 void initialize(roomType[]);    // Has to be roomtype[NOROOM] for some reason
 
-void execute(string&, rooms&, rooms&, roomType[], inventory&, puzzle&, int&); // rooms has an & next to it because we need the function to return the current room
+void execute(string&, rooms&, rooms&, roomType[], inventory&, puzzle&, int&, ofstream&); // rooms has an & next to it because we need the function to return the current room
 
 void parrot(string[], int);//PigLatin
 
@@ -69,13 +69,13 @@ bool pwordcheck(string[]);
 
 void invent(inventory);
 
-void initializeStatus(roomType[], inventory&, puzzle&);
+void initializeStatus(roomType[], rooms&, inventory&, puzzle&);
 
 void loadGame(ifstream&, inventory&, rooms&, roomType[], puzzle&);
 
 void saveGame(ofstream&, inventory, rooms, roomType[], puzzle);
 
-string EnumToString(rooms);
+char EnumToChar(rooms);
 
 void itemDisplay(puzzle, rooms, roomType[]);
 
@@ -117,10 +117,10 @@ int main()
 			loadGame(Load, inv, currentRoom, room, puz);
 		}
 		else
-			initializeStatus(room, inv, puz);    //  RESTART
+			initializeStatus(room,currentRoom, inv, puz);    //  RESTART
 	}
 	else
-		initializeStatus(room, inv, puz);    // NEW GAME 
+		initializeStatus(room, currentRoom, inv, puz);    // NEW GAME 
 
 
 
@@ -163,20 +163,15 @@ int main()
 				}
 			}
 		}
-		lastRoom = currentRoom;
+		
+
 
 		getline(cin, command);
 		tell++;
 
 
-
-		if (command == "save")     // This was hard to put into the execute funtion so instead it was put into main.
-		{
-			saveGame(Save, inv, currentRoom, room, puz);
-		}
-		else
-			execute(command, currentRoom, lastRoom, room, inv, puz, gameCheck); 	// First send command. Then currentRoom. Then lastRoom. Then send room information. Then send player inventory. Then puzzle status. 
-
+		execute(command, currentRoom, lastRoom, room, inv, puz, gameCheck, Save); 
+	    // First send command. Then currentRoom. Then lastRoom. Then send room information. Then send player inventory. Then puzzle status. Lastly Save file. 
 
 
 
@@ -358,18 +353,19 @@ void loadGame(ifstream& load, inventory& inv, rooms& current, roomType rooms[NOR
 	place++;
 	switch (line[place])     // SETS CURRENT ROOM
 	{
-	case '0': current = TREE; break;
-	case '1': current = ISLAND; break;
-	case '2': current = GANGPLANK; break;
-	case '3': current = UPPERDECK; break;
-	case '4': current = SHIPWHEEL; break;
-	case '5': current = BOTTOMDECK; break;
-	case '6': current = GALLEY; break;
-	case '7': current = BRIG; break;
-	case '8': current = CAPTAINQUARTERS; break;
-	case '9': current = CARGOHOLD; break;
-	case '10':current = LADDER; break;
-	default: current = ISLAND;
+    	case 'a': current = TREE; break;
+    	case 'b': current = ISLAND; break;
+    	case 'c': current = GANGPLANK; break;
+    	case 'd': current = UPPERDECK; break;
+    	case 'e': current = SHIPWHEEL; break;
+    	case 'f': current = BOTTOMDECK; break;
+    	case 'g': current = GALLEY; break;
+    	case 'h': current = BRIG; break;
+    	case 'i': current = CAPTAINQUARTERS; break;
+    	case 'j': current = CARGOHOLD; break;
+    	case 'k': current = LADDER; break; 
+    	case 'l': current = GCAVE; break;
+    	default: current = ISLAND;
 	}
 
 }
@@ -477,7 +473,7 @@ void saveGame(ofstream& Save, inventory inv, rooms current, roomType rooms[NOROO
 		Save << "FALSE parrot" << endl;
 	}
 
-	Save << current << endl;  // This keeps track of the current location of the player. It will print a number 
+	Save << EnumToChar(current) << endl;  // This keeps track of the current location of the player. It will print a number 
 
 	cout << endl;
 	cout << "...Saving..." << endl;
@@ -772,7 +768,7 @@ void itemDisplay(puzzle puz, rooms currentRoom,roomType rooms[NOROOM])
 
 
 
-void initializeStatus(roomType RoomStatus[NOROOM], inventory& inv, puzzle& puz)   // This function only occurs if there is no save game. So basically this is the start of the game.
+void initializeStatus(roomType RoomStatus[NOROOM], rooms& current, inventory& inv, puzzle& puz)   // This function only occurs if there is no save game. So basically this is the start of the game.
 {
 	cout << "---------------------------------------------------------" << endl;
 	cout << endl << endl;
@@ -783,6 +779,8 @@ void initializeStatus(roomType RoomStatus[NOROOM], inventory& inv, puzzle& puz) 
 	cout << "Type 'help' at any time to view instructions" << endl << endl;
 	cout << "Good luck and have fun!" << endl;
 	cout << endl;
+    
+    current = ISLAND;
 
 	puz.knife = false;
 	puz.gorilla = false;
@@ -875,9 +873,9 @@ void initializeStatus(roomType RoomStatus[NOROOM], inventory& inv, puzzle& puz) 
 
 
 
-void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType rooms[NOROOM], inventory& inv, puzzle& puz, int& gameCheck)
+void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType rooms[NOROOM], inventory& inv, puzzle& puz, int& gameCheck,ofstream& Save)
 {
-	//lastRoom = currentRoom;
+
 	string word[2], pword[15];
 	int blank, i;
 	string pcommand;
@@ -900,29 +898,34 @@ void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType room
 
 	if (word[0] == "south" or word[0] == "s" or word[1] == "south" or word[1] == "s")
 	{
+	    lastRoom = currentRoom;
 		currentRoom = rooms[currentRoom].direction.south;
 	}
 	else if (word[0] == "east" or word[0] == "e" or word[1] == "east" or word[1] == "e")
 	{
+	    lastRoom = currentRoom;
 		currentRoom = rooms[currentRoom].direction.east;
 	}
 	else if (word[0] == "west" or word[0] == "w" or word[1] == "west" or word[1] == "w")
 	{
+	    lastRoom = currentRoom;
 		currentRoom = rooms[currentRoom].direction.west;
 	}
 	else if (word[0] == "north" or word[0] == "n" or word[1] == "north" or word[1] == "n")
 	{
+	    lastRoom = currentRoom;
 		currentRoom = rooms[currentRoom].direction.north;
 	}
 	else if (word[0] == "up" or word[0] == "u" or word[1] == "up" or word[1] == "u")
 	{
+	    lastRoom = currentRoom;
 		currentRoom = rooms[currentRoom].direction.up;
 	}
 	else if (word[0] == "down" or word[0] == "d" or word[1] == "down" or word[1] == "d")
 	{
+	    lastRoom = currentRoom;
 		currentRoom = rooms[currentRoom].direction.down;
 	}
-
 
 
 	else if (word[0] == "take" or word[0] == "grab" or word[0] == "pickup" or word[0] == "get")    // PICK UP STUFF
@@ -940,16 +943,16 @@ void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType room
 						cout << "You got the keys!" << endl;
 					}
 					else
-						cout << "No keys here bucko" << endl;
+						cout << "No keys here bucko." << endl;
 				}
 				else
 				{
-					cout << "No keys here bucko" << endl;
+					cout << "No keys here bucko." << endl;
 				}
 			}
 			else
 			{
-				cout << "No keys here bucko" << endl;
+				cout << "No keys here bucko." << endl;
 			}
 		}
 
@@ -969,12 +972,19 @@ void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType room
 					inv.item.banana = true;
 					cout << "You cut down a banana!" << endl;
 					puz.knife = true;
+					cout <<" /`-.__                                 /\\"<<endl;
+					cout <<" `. .  ~~--..__                   __..-' ,'"<<endl;
+					cout <<"   `.`-.._     ~~---...___...---~~  _,~,/"<<endl;
+					cout <<"     `-._ ~--..__             __..-~ _-~"<<endl;
+					cout <<"         ~~-..__ ~~--.....--~~   _.-~"<<endl;
+					cout <<"                ~~--...___...--~~"<<endl;
+					cout << endl;
 				}
 				else
 					cout << "You'll need a knife to cut these down." << endl;
 			}
 			else
-				cout << "There are no bananas here buddy." << endl;
+				cout << "There are no bananas here." << endl;
 		}
 
 
@@ -985,7 +995,18 @@ void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType room
 				rooms[currentRoom].item.knife = false;
 				inv.item.knife = true;
 				cout << "You picked up a knife!" << endl;
-
+				cout<<endl;
+                cout<<"                                  _____________________________"<<endl;
+                cout<<"                           _.-''``------------------------|`. |``''--..__"<<endl;
+                cout<<"                      _.-'` ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' | : |          ``'';';--..__"<<endl;
+                cout<<"                 _.-'`                                    | : |         '   :';       ```';"<<endl;
+			    cout<<"            _.-'`                           ________/\_/\_|.'_|_       '   :';           /"<<endl;
+			    cout<<"       _.-'`                         _.-''``                    ``''--:.__;';           _|"<<endl;
+			    cout<<"     .'`                        _.-'`                                     `'`''-._     /"<<endl;
+			    cout<<"   .`                       _.-'                                                  `'-./"<<endl;
+			    cout<<" .'                    _.-'`"<<endl;
+			    cout<<"/               __..-'`"<<endl;
+			    cout<<"``'''----'''````"<<endl;
 			}
 			else
 				cout << "There is no knife here!" << endl;
@@ -1186,13 +1207,27 @@ void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType room
 	else if (word[0] == "back" or word[0] == "return")
 	{
 		currentRoom = lastRoom;
-		//cout << "You are back at the ";
-		//cout << EnumToString(lastRoom) << endl;
 	}
 
 	else if (word[0] == "quit")
 	{
 		command = "quit";
+	}
+	
+	else if (word[0] == "restart")
+	{
+	    cout << "Are you sure you'd like to restart?" << endl;
+		char RestartAnswer = cin.get();
+		cin.ignore(999, '\n');
+		if (tolower(RestartAnswer) == 'y' or tolower(RestartAnswer) == 'r')
+		{
+			initializeStatus(rooms, currentRoom, inv, puz);    //  RESTART
+		}
+	}
+	else if (word[0] == "save")
+	{
+		saveGame(Save, inv, currentRoom, rooms, puz);
+
 	}
 
 	else if (word[0] == "give" or word[0] == "feed" or word[0] == "unlock" or word[0] == "free" or word[0] == "use" or word[0] == "open"
@@ -1368,7 +1403,7 @@ void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType room
 			else
 				if (word[0] == "west" or word[0] == "w" or word[0] == "go"
 					or word[0]=="look" or word[0] == "drop" or word[0] == "inventory" or word[0] == "help"
-					or word[0] == "commands")
+					or word[0] == "commands" or word[0] == "back")
 				{
 
 				}
@@ -1407,20 +1442,24 @@ void execute(string& command, rooms& currentRoom, rooms& lastRoom, roomType room
 
 
 
-string EnumToString(rooms RoomFind)   // Converts enumerated rooms back into strings for use in outputs
+char EnumToChar(rooms RoomFind)   // Converts enumerated rooms back into strings for use in outputs
 {
-	switch (RoomFind)
-	{
-	case 1: return "tree";
-	case 2: return "island";
-	case 3: return "gangplank";
-	case 4: return "upperdeck";
-	case 5: return "shipwheel";
-	case 6: return "bottomdeck";
-	case 7: return "galley";
-	case 8: return "captain's quarters";
-	case 9: return "cargohold";
-	case 10:   return "ladder";
-	}
-
+    switch (RoomFind)
+    {
+        
+        case 0: return 'a';
+        case 1: return 'b'; 
+        case 2: return 'c';
+        case 3: return 'd';
+        case 4: return 'e';
+        case 5: return 'f';
+        case 6: return 'g';
+        case 7: return 'h';
+        case 8: return 'i';
+        case 9:   return 'j';
+        case 10: return 'k';
+        case 11: return 'l';
+        case 12: return 'm';
+    }
+ 
 }
